@@ -1,22 +1,15 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
 
 
-class User(AbstractBaseUser):
+class User(AbstractUser):
 
+    username = None
     email = models.EmailField(unique=True)
-    last_name = models.CharField(max_length=100)
-    first_name = models.CharField(max_length=100)
 
-    EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-
-    def get_full_name(self):
-        return '{} {}'.format(self.first_name, self.last_name)
-
-    def get_short_name(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+    REQUIRED_FIELDS = []
 
 
 class Institution(models.Model):
