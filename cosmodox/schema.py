@@ -13,8 +13,11 @@ class Query(
 ):
     pass
 
-class Mutation(graphene.ObjectType):
+class Mutation(
+    projects.schema.Mutation,
+    graphene.ObjectType
+):
     pass
 
-# schema = graphene.Schema(query=Query, mutation=Mutation, directives=all_directives)
-schema = graphene.Schema(query=Query, directives=all_directives)
+schema = graphene.Schema(query=Query, mutation=Mutation, directives=all_directives)
+# schema = graphene.Schema(query=Query, directives=all_directives)
