@@ -20,6 +20,7 @@ from graphene_django_extras.views import ExtraGraphQLView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^graphql', ExtraGraphQLView.as_view(), name='graphql'),
 ]
 
 if settings.DEBUG:

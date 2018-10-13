@@ -33,17 +33,20 @@ class ResearchGroupList(DjangoListObjectType):
     class Meta:
         model = models.ResearchGroup
 
-class Personal(DjangoObjectType):
+class PersonalAccount(DjangoObjectType):
 
     class Meta:
         model = models.Personal
 
 
-class PersonalList(DjangoListObjectType):
+class PersonalAccountList(DjangoListObjectType):
 
     class Meta:
         model = models.Personal
 
 
 class Query:
-    pass
+    user = DjangoObjectField(User)
+    institution = DjangoObjectField(Institution)
+    research_group = DjangoObjectField(ResearchGroup)
+    personal_account = DjangoObjectField(PersonalAccount)

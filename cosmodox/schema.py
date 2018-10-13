@@ -1,11 +1,13 @@
 import graphene
 import core.schema
+import accounts.schema
 import projects.schema
 from graphene_django_extras import all_directives
 
 
 class Query(
     core.schema.Query,
+    accounts.schema.Query,
     projects.schema.Query,
     graphene.ObjectType
 ):
