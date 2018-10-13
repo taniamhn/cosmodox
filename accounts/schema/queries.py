@@ -9,6 +9,7 @@ class User(DjangoObjectType):
     class Meta:
         model = models.User
 
+
 class Institution(DjangoObjectType):
 
     class Meta:

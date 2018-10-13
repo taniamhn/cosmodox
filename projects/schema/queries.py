@@ -17,4 +17,5 @@ class ProjectList(DjangoListObjectType):
 
 
 class Query:
-    pass
+    projects = DjangoListObjectField(Project, description='All projects list')
+    project = DjangoObjectField(Project)
