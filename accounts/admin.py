@@ -2,6 +2,18 @@ from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib import admin
 from . import models
 
+@admin.register(models.Institution)
+class InstitutionAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.ResearchGroup)
+class ResearchGroupAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.Personal)
+class PersonalAdmin(admin.ModelAdmin):
+    pass
+
 
 @admin.register(models.User)
 class UserAdmin(DjangoUserAdmin):
