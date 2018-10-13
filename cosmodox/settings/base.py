@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'graphene_django',
+
     'core',
     'projects',
     'accounts',
@@ -125,3 +127,17 @@ STATIC_URL = '/static/'
 # User
 
 AUTH_USER_MODEL = 'accounts.User'
+
+# Graphene configuration
+
+GRAPHENE = {
+    'SCHEMA': 'cosmodox.schema.schema',
+    'MIDDLEWARE': [
+        'graphene_django_extras.ExtraGraphQLDirectiveMiddleware'
+    ]
+}
+
+GRAPHENE_DJANGO_EXTRAS = {
+    'DEFAULT_PAGINATION_CLASS': 'graphene_django_extras.paginations.LimitOffsetGraphqlPagination',
+    'DEFAULT_PAGE_SIZE': 10000
+}

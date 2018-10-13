@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf import settings
+from graphene_django_extras.views import ExtraGraphQLView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns = urlpatterns + [
+        url(r'^graphiql', ExtraGraphQLView.as_view(graphiql=True)),
+    ]
