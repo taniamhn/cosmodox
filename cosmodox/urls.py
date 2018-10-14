@@ -18,9 +18,13 @@ from django.contrib import admin
 from django.conf import settings
 from graphene_django_extras.views import ExtraGraphQLView
 
+from django.views.generic import TemplateView
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^graphiql', ExtraGraphQLView.as_view(graphiql=True)),
     url(r'^graphql', ExtraGraphQLView.as_view(), name='graphql'),
+    url('.*', TemplateView.as_view(template_name='index.html')),
 ]
 
 if settings.DEBUG:
