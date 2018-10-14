@@ -23,3 +23,14 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProjectUpdate(models.Model):
+
+    content = models.TextField()
+    created_at = models.DateField(auto_now_add=True)
+    project = models.ForeignKey(Project, related_name='updates')
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='project_updates')
+
+    def __str__(self):
+        return '{} Update #{}'.format(self.project, self.id)

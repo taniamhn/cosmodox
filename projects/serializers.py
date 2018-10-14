@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db import transaction
-from .models import Project
+from .models import Project, ProjectUpdate
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -19,4 +19,16 @@ class ProjectSerializer(serializers.ModelSerializer):
         project.areas = areas
         return project
 
+
+class ProjectUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProjectUpdate
+        fields = ['content', 'project']
+    
+    @transaction.atomic
+    def create(self, validated_data):
+        user = self.context['request'].user
+        update = ProjectUpdate.objects.create(created_by=user, **validated_data)
+        return update
 
