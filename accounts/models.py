@@ -55,9 +55,7 @@ class Personal(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     areas = models.ManyToManyField('core.Area', related_name='personal_accounts')
     education_level = models.CharField(max_length=1, choices=EDUCATION_LEVELS, blank=True)
-    # institucion = models.ForeignKey('Institucion', blank=True, null=True)
-    # grupos_investigacion = models.ManyToManyField(
-    #     'GrupoInvestigacion', blank=True, null=True)
+    research_groups = models.ManyToManyField(ResearchGroup, related_name='members', blank=True)
 
     def __str__(self):
         return self.user.get_full_name()

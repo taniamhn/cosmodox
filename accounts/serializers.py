@@ -148,3 +148,16 @@ class EditPersonalAccountSerializer(serializers.ModelSerializer):
         instance.save()
         instance.areas = areas
         return instance
+
+class JoinResearchGroupSerializer(serializers.ModelSerializer):
+
+    group = serializers.PrimaryKeyRelatedField(queryset=ResearchGroup.objects.all())
+
+    class Meta:
+        model = ResearchGroup
+        fields = ['group']
+    
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        instance.research_groups.add(validated_data['group'])
+        return instance

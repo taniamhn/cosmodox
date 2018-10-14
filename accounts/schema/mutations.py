@@ -71,6 +71,27 @@ class UpdatePersonalAccountMutation(DjangoSerializerMutation):
         input_field_name = 'input'
         nested_fields = ['user']
 
+class JoinResearchGroupInput(DjangoInputObjectType):
+
+    group = graphene.ID(required=True)
+
+    class Meta:
+        model = serializers.JoinResearchGroupSerializer.Meta.model
+        only_fields = serializers.JoinResearchGroupSerializer.Meta.fields
+        input_for = 'update'
+
+class JoinResearchGroupMutation(DjangoSerializerMutation):
+
+    class Meta:
+        serializer_class = serializers.JoinResearchGroupSerializer
+        only_fields = serializers.JoinResearchGroupSerializer.Meta.fields
+        input_field_name = 'input'
+    
+    @classmethod
+    def save_mutation(cls, root, info, **kwargs):
+        kwargs[cls._meta.input_field_name].update({'id': info.context.user.id})
+        return super().save_mutation(root, info, **kwargs)
+
 
 class Mutation:
     create_institution = CreateInstitutionMutation.CreateField(description='Creates an institution')
@@ -80,3 +101,4 @@ class Mutation:
     update_institution = UpdateInstitutionMutation.UpdateField(description='Updates an institution')
     update_research_group = UpdateResearchGroupMutation.UpdateField(description='Updates a research group')
     update_personal_account = UpdatePersonalAccountMutation.UpdateField(description='Updates a personal account')
+    join_research_group = JoinResearchGroupMutation.UpdateField(description='Join the user to a research group')
