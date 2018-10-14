@@ -38,8 +38,45 @@ class CreatePersonalAccountMutation(DjangoSerializerMutation):
         input_field_name = 'input'
         nested_fields = ['user']
 
+# EDIT MUTATION
+
+class UpdateUserInput(DjangoInputObjectType):
+
+    class Meta:
+        model = serializers.EditUserSerializer.Meta.model
+        only_fields = serializers.EditUserSerializer.Meta.fields
+        input_for = 'update'
+
+class UpdateInstitutionMutation(DjangoSerializerMutation):
+
+    class Meta:
+        serializer_class = serializers.EditInstitutionSerializer
+        only_fields = serializers.EditInstitutionSerializer.Meta.fields
+        input_field_name = 'input'
+        nested_fields = ['owner']
+
+class UpdateResearchGroupMutation(DjangoSerializerMutation):
+
+    class Meta:
+        serializer_class = serializers.EditResearchGroupSerializer
+        only_fields = serializers.EditResearchGroupSerializer.Meta.fields
+        input_field_name = 'input'
+        nested_fields = ['owner']
+
+class UpdatePersonalAccountMutation(DjangoSerializerMutation):
+
+    class Meta:
+        serializer_class = serializers.EditPersonalAccountSerializer
+        only_fields = serializers.EditPersonalAccountSerializer.Meta.fields
+        input_field_name = 'input'
+        nested_fields = ['user']
+
 
 class Mutation:
     create_institution = CreateInstitutionMutation.CreateField(description='Creates an institution')
     create_research_group = CreateResearchGroupMutation.CreateField(description='Creates a research group')
     create_personal_account = CreatePersonalAccountMutation.CreateField(description='Creates a personal account')
+
+    update_institution = UpdateInstitutionMutation.UpdateField(description='Updates an institution')
+    update_research_group = UpdateResearchGroupMutation.UpdateField(description='Updates a research group')
+    update_personal_account = UpdatePersonalAccountMutation.UpdateField(description='Updates a personal account')

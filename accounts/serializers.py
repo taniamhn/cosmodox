@@ -10,9 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            'email', 'first_name', 'last_name', 'password1', 'password2'
-        ]
+        fields = ['email', 'first_name', 'last_name', 'password1', 'password2']
     
     def create(self, validated_data):
         validated_data.pop('password2')
@@ -44,7 +42,7 @@ class ReasearchGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ResearchGroup
-        fields = ['name', 'owner', 'areas']
+        fields = ['name', 'owner', 'areas', 'institution']
     
     @transaction.atomic
     def create(self, validated_data):
@@ -74,3 +72,79 @@ class PersonalAccountSerializer(serializers.ModelSerializer):
         account = Personal.objects.create(user=user, **validated_data)
         account.areas = areas
         return account
+
+# EDIT SERIALIZERS
+
+class EditUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name']
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        for name, value in validated_data.items():
+            setattr(instance, name, value)
+        instance.save()
+        return instance
+
+
+class EditInstitutionSerializer(serializers.ModelSerializer):
+
+    owner = EditUserSerializer()
+
+    class Meta:
+        model = Institution
+        fields = ['name', 'owner']
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        user_serializer = EditUserSerializer(instance.owner, data=validated_data.pop('owner'))
+        user_serializer.is_valid()
+        user = user_serializer.save()
+        for name, value in validated_data.items():
+            setattr(instance, name, value)
+        instance.save()
+        return instance
+
+
+class EditResearchGroupSerializer(serializers.ModelSerializer):
+
+    owner = EditUserSerializer()
+
+    class Meta:
+        model = ResearchGroup
+        fields = ['name', 'owner', 'areas', 'institution']
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        user_serializer = EditUserSerializer(instance.owner, data=validated_data.pop('owner'))
+        user_serializer.is_valid()
+        user = user_serializer.save()
+        areas = validated_data.pop('areas')
+        for name, value in validated_data.items():
+            setattr(instance, name, value)
+        instance.save()
+        instance.areas = areas
+        return instance
+
+
+class EditPersonalAccountSerializer(serializers.ModelSerializer):
+
+    owner = EditUserSerializer()
+
+    class Meta:
+        model = Personal
+        fields = ['user', 'areas', 'education_level']
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        user_serializer = EditUserSerializer(instance.user, data=validated_data.pop('user'))
+        user_serializer.is_valid()
+        user = user_serializer.save()
+        areas = validated_data.pop('areas')
+        for name, value in validated_data.items():
+            setattr(instance, name, value)
+        instance.save()
+        instance.areas = areas
+        return instance
