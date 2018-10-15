@@ -3,3 +3,7 @@
 .vscode
 *.pyc
 cosmodox/settings/.env
+ui/build/
+ui/node_modules/
+ui/test/integration/screenshots-current/
+ui/_site/
