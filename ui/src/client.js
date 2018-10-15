@@ -1,5 +1,8 @@
-const client = new Apollo.ApolloClient({
-    uri: '/graphql',
-});
+if (!window.Apollo.client) {
+    const client = new Apollo.ApolloClient({
+        uri: '/graphql',
+    });
 
-export default client;
+    window.__APOLLO_CLIENT__ = client;
+    window.Apollo.client = client;
+}
