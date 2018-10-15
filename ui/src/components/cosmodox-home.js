@@ -48,7 +48,7 @@ class CosmodoxHome extends PageViewElement {
               <vaadin-button>Iniciar sesión</vaadin-button>
             </form>
           </iron-form>
-          <p>¿No tienes cuenta? <a href="#" @click="${() => this.shadowRoot.querySelector('paper-dialog').opened = true}">Registrate</a></p>
+          <p>¿No tienes cuenta? <a href="/#" @click="${() => this.shadowRoot.querySelector('paper-dialog').opened = true}">Registrate</a></p>
         </div>
       </section>
       <paper-dialog modal>

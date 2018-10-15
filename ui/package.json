@@ -6,9 +6,12 @@
   ],
   "license": "BSD-3-Clause",
   "repository": "Polymer/pwa-starter-kit",
-  "watch":{
+  "watch": {
     "build:static": {
-      "patterns": ["src", "index.html"],
+      "patterns": [
+        "src",
+        "index.html"
+      ],
       "extensions": "js",
       "ignore": "build/dev/index.html"
     }
@@ -46,6 +49,9 @@
     "@vaadin/vaadin-dropdown-menu": "^1.2.0-beta1",
     "@vaadin/vaadin-text-field": "^2.1.2",
     "@webcomponents/webcomponentsjs": "^2.0.0",
+    "apollo-boost": "^0.1.16",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.0",
     "pwa-helpers": "^0.8.2"
   },
   "devDependencies": {

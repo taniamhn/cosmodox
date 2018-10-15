@@ -16,6 +16,7 @@ import { installRouter } from 'pwa-helpers/router.js';
 import { updateMetadata } from 'pwa-helpers/metadata.js';
 import { routeToPage } from '../routes.js';
 import { menuIcon } from './my-icons.js';
+import { client } from '../client.js';
 
 // These are the elements needed by this element.
 import '@polymer/app-layout/app-drawer/app-drawer.js';
