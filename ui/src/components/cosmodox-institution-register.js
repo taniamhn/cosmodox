@@ -12,7 +12,7 @@ import { html } from '@polymer/lit-element';
 import { PageViewElement } from './page-view-element.js';
 import '@polymer/iron-form/iron-form.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field';
+import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-password-field.js';
 
 // These are the shared styles needed by this element.
@@ -40,7 +40,7 @@ class CosmodoxInstitutionRegister extends PageViewElement {
           </form>
         </iron-form>
       </section>
-    `
+    `;
   }
 
   createAccount() {
