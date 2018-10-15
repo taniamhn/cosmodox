@@ -135,6 +135,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 GRAPHENE = {
     'SCHEMA': 'cosmodox.schema.schema',
+    'SCHEMA_OUTPUT': 'ui/schema.json',
     'MIDDLEWARE': [
         'graphene_django_extras.ExtraGraphQLDirectiveMiddleware'
     ]

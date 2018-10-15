@@ -1,0 +1,26 @@
+{
+    "extends": "airbnb-base",
+    "plugins": ["graphql"],
+    "env": {
+        "browser": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 8
+    },
+    "globals": {
+        "Apollo": false
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "no-underscore-dangle": "off",
+        "class-methods-use-this": "off",
+        "max-len": ["error", { "code": 120 }],
+        "graphql/template-strings": [
+            "error",
+            {
+                "env": "apollo",
+                "tagName": "Apollo.gql"
+            }
+        ]
+    }
+}
