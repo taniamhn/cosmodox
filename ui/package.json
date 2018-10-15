@@ -7,7 +7,11 @@
   "license": "BSD-3-Clause",
   "repository": "Polymer/pwa-starter-kit",
   "watch":{
-    "build:static": "{src}/*.js"
+    "build:static": {
+      "patterns": ["src", "index.html"],
+      "extensions": "js",
+      "ignore": "build/dev/index.html"
+    }
   },
   "scripts": {
     "watch": "npm-watch",
