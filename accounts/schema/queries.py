@@ -59,3 +59,5 @@ class Query:
     institution = DjangoObjectField(Institution)
     research_group = DjangoObjectField(ResearchGroup)
     personal_account = DjangoObjectField(PersonalAccount)
+
+    institutions = DjangoListObjectField(InstitutionList)

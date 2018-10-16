@@ -13,11 +13,12 @@ import { ApolloMutation } from 'lit-apollo/apollo-mutation';
 import { PageViewElement } from './page-view-element.js';
 import { login } from '../auth.js';
 import '@polymer/iron-form/iron-form.js';
+import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
-import '@vaadin/vaadin-checkbox/theme/material/vaadin-checkbox.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-password-field.js';
-import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
+import './areas-checkbox.js';
+import './institutions-combo.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
@@ -36,7 +37,7 @@ const createButtonText = loading => html`${loading ? html`<concrete-loading-icon
 
 class ResearchGroupRegisterForm extends ApolloMutation {
   render() {
-    const { loading, areas } = this;
+    const { loading } = this;
 
     return html`
       <style>
@@ -50,21 +51,14 @@ class ResearchGroupRegisterForm extends ApolloMutation {
           <vaadin-text-field name="email" label="Email" type="email" required></vaadin-text-field>
           <vaadin-text-field name="firstName" label="Nombre del lider" required></vaadin-text-field>
           <vaadin-text-field name="lastName" label="Apellido del lider" required></vaadin-text-field>
-          <vaadin-text-field name="institution" label="Institución educativa "></vaadin-text-field><br>
-          <label>Áreas de enfoque</label> <br>
-          ${areas.map(area => html`<vaadin-checkbox value="${area.id}">${area.nombre}</vaadin-checkbox>`)} <br>
-          <vaadin-text-field name="password1" label="Contraseña" type="password" required></vaadin-text-field>
-          <vaadin-text-field name="password2" label="Confirmar contraseña" type="password" required></vaadin-text-field>
+          <institutions-combo name="institution" required></institutions-combo>
+          <areas-checkbox name="areas"></areas-checkbox>
+          <vaadin-password-field name="password1" label="Contraseña" required></vaadin-password-field>
+          <vaadin-password-field name="password2" label="Confirmar contraseña" required></vaadin-password-field>
           <vaadin-button @click="${() => this.createAccount()}">${createButtonText(loading)}</vaadin-button>
         </form>
       </iron-form>  
     `;
-  }
-
-  static get properties() {
-    return {
-      areas: { type: Array },
-    };
   }
 
   constructor() {
@@ -78,31 +72,29 @@ class ResearchGroupRegisterForm extends ApolloMutation {
         window.location = researchGroup.detailUrl;
       }
     };
-
-    this.areas = [
-      { id: 1, nombre: 'Artes' },
-      { id: 2, nombre: 'Ciencias Exactas' },
-      { id: 3, nombre: 'Emprendimiento' },
-      { id: 4, nombre: 'Lenguas y cultura' },
-      { id: 5, nombre: 'Pensamiento global' },
-      { id: 6, nombre: 'Tecnología' },
-      { id: 7, nombre: 'Otros' },
-    ];
   }
 
-  _mutationData({ name, email, firstName, lastName, password1, password2 } = {}) {
+  _mutationData({ name, areas, institution, email, firstName, lastName, password1, password2 } = {}) {
     return {
       name,
+      areas,
+      institution,
       owner: { email, lastName, firstName, password1, password2 },
     };
   }
 
   createAccount() {
     const form = this.shadowRoot.querySelector('iron-form');
+    const areasCheckbox = form.querySelector('areas-checkbox');
+    const institutionsCombo = form.querySelector('institutions-combo');
     if (form.validate()) {
-      this.variables = { input: this._mutationData(form.serializeForm()) };
-      console.log(this.variables);
-      // this.mutate();
+      const input = this._mutationData({
+        ...form.serializeForm(),
+        areas: areasCheckbox.value,
+        institution: institutionsCombo.value,
+      });
+      this.variables = { input };
+      this.mutate();
     }
   }
 }
