@@ -16,6 +16,7 @@ import { installRouter } from 'pwa-helpers/router.js';
 import { updateMetadata } from 'pwa-helpers/metadata.js';
 import { routeToPage } from '../routes.js';
 import { menuIcon } from './my-icons.js';
+import { checkAuth } from '../auth.js';
 import '../client.js';
 
 // These are the elements needed by this element.
@@ -229,7 +230,9 @@ class MyApp extends LitElement {
   constructor() {
     super();
     this._drawerOpened = false;
-    this._isAuthenticated = false;
+    console.log('init');
+    console.log(checkAuth());
+    this._isAuthenticated = checkAuth();
     // To force all event listeners for gestures to be passive.
     // See https://www.polymer-project.org/3.0/docs/devguide/settings#setting-passive-touch-gestures
     setPassiveTouchGestures(true);

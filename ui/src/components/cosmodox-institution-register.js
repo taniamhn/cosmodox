@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import { html } from '@polymer/lit-element';
 import { ApolloMutation } from 'lit-apollo/apollo-mutation';
 import { PageViewElement } from './page-view-element.js';
+import { login } from '../auth.js';
 import '@polymer/iron-form/iron-form.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
@@ -64,11 +65,7 @@ class InstitutionRegisterForm extends ApolloMutation {
       console.log(data.createInstitution);
       const { ok, institution } = data.createInstitution;
       if (ok) {
-        this.dispatchEvent(new CustomEvent('authentication-change', {
-          bubbles: true,
-          composed: true,
-          detail: { status: true },
-        }));
+        login(this);
         window.location = institution.detailUrl;
       }
     };
