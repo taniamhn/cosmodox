@@ -233,6 +233,7 @@ class MyApp extends LitElement {
     // To force all event listeners for gestures to be passive.
     // See https://www.polymer-project.org/3.0/docs/devguide/settings#setting-passive-touch-gestures
     setPassiveTouchGestures(true);
+    this.addEventListener('authentication-change', (e) => this._isAuthenticated = e.detail.status);
   }
 
   firstUpdated() {

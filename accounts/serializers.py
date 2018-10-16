@@ -1,5 +1,6 @@
-from rest_framework import serializers
 from django.db import transaction
+from django.contrib.auth import login, authenticate
+from rest_framework import serializers
 from .models import Institution, User, ResearchGroup, Personal
 
 
@@ -29,10 +30,13 @@ class InstitutionSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        user_serializer = UserSerializer(data=validated_data.pop('owner'))
+        owner = validated_data.pop('owner')
+        user_serializer = UserSerializer(data=owner)
         user_serializer.is_valid()
         user = user_serializer.save()
         institution = Institution.objects.create(owner=user, **validated_data)
+        user = authenticate(email=owner['email'], password=owner['password1'])
+        login(self.context['request'], user)
         return institution
 
 

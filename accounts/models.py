@@ -14,6 +14,8 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    def profile(self):
+        return getattr(self, 'institution', None) or getattr(self, 'research_group', None) or getattr(self, 'personal', None)
 
 class Institution(models.Model):
 
@@ -22,6 +24,9 @@ class Institution(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def detail_url(self):
+        return '/institution/{}'.format(self.id)
 
 
 class ResearchGroup(models.Model):
@@ -33,6 +38,9 @@ class ResearchGroup(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def detail_url(self):
+        return '/research-group/{}'.format(self.id)
 
 
 class Personal(models.Model):
@@ -59,3 +67,6 @@ class Personal(models.Model):
 
     def __str__(self):
         return self.user.get_full_name()
+    
+    def detail_url(self):
+        return '/profile/{}'.format(self.id)

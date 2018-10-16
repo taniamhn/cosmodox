@@ -9,47 +9,98 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 import { html } from '@polymer/lit-element';
+import { ApolloMutation } from 'lit-apollo/apollo-mutation';
 import { PageViewElement } from './page-view-element.js';
 import '@polymer/iron-form/iron-form.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-password-field.js';
+import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
 
-class CosmodoxInstitutionRegister extends PageViewElement {
+const createInstitutionMutation = Apollo.gql`
+  mutation createInstitution($input: InstitutionCreateGenericType!) {
+    createInstitution(input: $input) {
+      ok
+      errors { field, messages }
+      institution { id, detailUrl }
+    }
+  }
+`;
+
+const createButtonText = loading => html`${loading ? html`<concrete-loading-icon></concrete-loading-icon>` : html`Crear cuenta`}`;
+
+class InstitutionRegisterForm extends ApolloMutation {
   render() {
+    const { loading } = this;
     return html`
-      ${SharedStyles}
       <style>
         form {
           display: grid;
         }
       </style>
-      <section>
-        <h2>Nueva institución</h2>
-        <iron-form>
+      <iron-form>
           <form>
-            <vaadin-text-field label="Nombre" required></vaadin-text-field>
-            <vaadin-text-field label="Email" type="email" required></vaadin-text-field>
-            <vaadin-text-field label="Nombre del responsable" required></vaadin-text-field>
-            <vaadin-text-field label="Contraseña" type="password" required></vaadin-text-field>
-            <vaadin-text-field label="Confirmar contraseña" type="password" required></vaadin-text-field>
-            <vaadin-button @click="${() => this.createAccount()}">Crear cuenta</vaadin-button>
+            <vaadin-text-field name="name" label="Nombre" required></vaadin-text-field>
+            <vaadin-text-field name="email" label="Email" type="email" required></vaadin-text-field>
+            <vaadin-text-field name="firstName" label="Nombres del responsable" required></vaadin-text-field>
+            <vaadin-text-field name="lastName" label="Apellidos del responsable" required></vaadin-text-field>
+            <vaadin-password-field name="password1" label="Contraseña" required></vaadin-password-field>
+            <vaadin-password-field name="password2" label="Confirmar contraseña" required></vaadin-password-field>
+            <vaadin-button @click="${() => this.createAccount()}">${createButtonText(loading)}</vaadin-button>
           </form>
         </iron-form>
-      </section>
     `;
+  }
+
+  constructor() {
+    super();
+    console.log('constructor');
+    this.client = Apollo.client;
+    this.mutation = createInstitutionMutation;
+    this.onCompleted = (data) => {
+      console.log(data.createInstitution);
+      const { ok, institution } = data.createInstitution;
+      if (ok) {
+        this.dispatchEvent(new CustomEvent('authentication-change', {
+          bubbles: true,
+          composed: true,
+          detail: { status: true },
+        }));
+        window.location = institution.detailUrl;
+      }
+    };
+  }
+
+  _mutationData({ name, email, firstName, lastName, password1, password2 } = {}) {
+    return {
+      name,
+      owner: { email, lastName, firstName, password1, password2 },
+    };
   }
 
   createAccount() {
     const form = this.shadowRoot.querySelector('iron-form');
     if (form.validate()) {
-      console.log('valid');
-      window.location = '/profile';
-      // Inscribe @to_do terminar
+      this.variables = { input: this._mutationData(form.serializeForm()) };
+      this.mutate();
     }
+  }
+}
+
+window.customElements.define('institution-register-form', InstitutionRegisterForm);
+
+class CosmodoxInstitutionRegister extends PageViewElement {
+  render() {
+    return html`
+      ${SharedStyles}
+      <section>
+        <h2>Nueva institución</h2>
+        <institution-register-form></institution-register-form>
+      </section>
+    `;
   }
 }
 

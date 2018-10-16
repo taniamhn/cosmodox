@@ -50,8 +50,10 @@
     "@vaadin/vaadin-text-field": "^2.1.2",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "apollo-boost": "^0.1.16",
+    "concrete-elements": "^0.4.5",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
+    "lit-apollo": "github:taniamhn/lit-apollo#master",
     "pwa-helpers": "^0.8.2"
   },
   "devDependencies": {
