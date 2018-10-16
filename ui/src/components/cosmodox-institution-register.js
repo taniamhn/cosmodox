@@ -21,7 +21,7 @@ import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
 
-const createInstitutionMutation = Apollo.gql`
+const createMutation = Apollo.gql`
   mutation createInstitution($input: InstitutionCreateGenericType!) {
     createInstitution(input: $input) {
       ok
@@ -43,26 +43,24 @@ class InstitutionRegisterForm extends ApolloMutation {
         }
       </style>
       <iron-form>
-          <form>
-            <vaadin-text-field name="name" label="Nombre" required></vaadin-text-field>
-            <vaadin-text-field name="email" label="Email" type="email" required></vaadin-text-field>
-            <vaadin-text-field name="firstName" label="Nombres del responsable" required></vaadin-text-field>
-            <vaadin-text-field name="lastName" label="Apellidos del responsable" required></vaadin-text-field>
-            <vaadin-password-field name="password1" label="Contraseña" required></vaadin-password-field>
-            <vaadin-password-field name="password2" label="Confirmar contraseña" required></vaadin-password-field>
-            <vaadin-button @click="${() => this.createAccount()}">${createButtonText(loading)}</vaadin-button>
-          </form>
-        </iron-form>
+        <form>
+          <vaadin-text-field name="name" label="Nombre" required></vaadin-text-field>
+          <vaadin-text-field name="email" label="Email" type="email" required></vaadin-text-field>
+          <vaadin-text-field name="firstName" label="Nombres del responsable" required></vaadin-text-field>
+          <vaadin-text-field name="lastName" label="Apellidos del responsable" required></vaadin-text-field>
+          <vaadin-password-field name="password1" label="Contraseña" required></vaadin-password-field>
+          <vaadin-password-field name="password2" label="Confirmar contraseña" required></vaadin-password-field>
+          <vaadin-button @click="${() => this.createAccount()}">${createButtonText(loading)}</vaadin-button>
+        </form>
+      </iron-form>
     `;
   }
 
   constructor() {
     super();
-    console.log('constructor');
     this.client = Apollo.client;
-    this.mutation = createInstitutionMutation;
+    this.mutation = createMutation;
     this.onCompleted = (data) => {
-      console.log(data.createInstitution);
       const { ok, institution } = data.createInstitution;
       if (ok) {
         login(this);

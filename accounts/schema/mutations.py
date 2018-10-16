@@ -32,6 +32,7 @@ class CreateResearchGroupMutation(DjangoSerializerMutation):
         serializer_class = serializers.ReasearchGroupSerializer
         only_fields = serializers.ReasearchGroupSerializer.Meta.fields
         input_field_name = 'input'
+        output_field_name = 'research_group'
         nested_fields = ['owner']
     
     @classmethod

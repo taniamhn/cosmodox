@@ -9,53 +9,76 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 import { html } from '@polymer/lit-element';
+import { ApolloMutation } from 'lit-apollo/apollo-mutation';
 import { PageViewElement } from './page-view-element.js';
+import { login } from '../auth.js';
 import '@polymer/iron-form/iron-form.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
 import '@vaadin/vaadin-checkbox/theme/material/vaadin-checkbox.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-password-field.js';
+import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
 
-class CosmodoxGroupRegister extends PageViewElement {
+const createMutation = Apollo.gql`
+  mutation createResearchGroup($input: ResearchGroupCreateGenericType!) {
+    createResearchGroup(input: $input) {
+      ok
+      errors { field, messages }
+      researchGroup { id, detailUrl }
+    }
+  }
+`;
+
+const createButtonText = loading => html`${loading ? html`<concrete-loading-icon></concrete-loading-icon>` : html`Crear cuenta`}`;
+
+class ResearchGroupRegisterForm extends ApolloMutation {
   render() {
-    const { areas } = this;
+    const { loading, areas } = this;
+
     return html`
-      ${SharedStyles}
       <style>
         form {
           display: grid;
         }
       </style>
-      <section>
-        <h2>Nuevo grupo</h2>
-        <iron-form>
-          <form>
-            <vaadin-text-field label="Nombres del grupo" required></vaadin-text-field>
-            <vaadin-text-field label="Email" type="email" required></vaadin-text-field>
-            <vaadin-text-field label="Nombre del lider" required></vaadin-text-field>
-            <vaadin-text-field label="Institución educativa "></vaadin-text-field><br>
-            <label>Áreas de enfoque</label> <br>
-            ${areas.map((area) => html`<vaadin-checkbox value="${area.id}">${area.nombre}</vaadin-checkbox>`)} <br>
-            <vaadin-text-field label="Contraseña" type="password" required></vaadin-text-field>
-            <vaadin-text-field label="Confirmar contraseña" type="password" required></vaadin-text-field>
-            <vaadin-button @click="${() => this.createAccount()}">Crear cuenta</vaadin-button>
-          </form>
-        </iron-form>      
-      </section>
-    `
+      <iron-form>
+        <form>
+          <vaadin-text-field name="name" label="Nombre del grupo" required></vaadin-text-field>
+          <vaadin-text-field name="email" label="Email" type="email" required></vaadin-text-field>
+          <vaadin-text-field name="firstName" label="Nombre del lider" required></vaadin-text-field>
+          <vaadin-text-field name="lastName" label="Apellido del lider" required></vaadin-text-field>
+          <vaadin-text-field name="institution" label="Institución educativa "></vaadin-text-field><br>
+          <label>Áreas de enfoque</label> <br>
+          ${areas.map(area => html`<vaadin-checkbox value="${area.id}">${area.nombre}</vaadin-checkbox>`)} <br>
+          <vaadin-text-field name="password1" label="Contraseña" type="password" required></vaadin-text-field>
+          <vaadin-text-field name="password2" label="Confirmar contraseña" type="password" required></vaadin-text-field>
+          <vaadin-button @click="${() => this.createAccount()}">${createButtonText(loading)}</vaadin-button>
+        </form>
+      </iron-form>  
+    `;
   }
 
   static get properties() {
     return {
       areas: { type: Array },
-    }
+    };
   }
 
   constructor() {
     super();
+    this.client = Apollo.client;
+    this.mutation = createMutation;
+    this.onCompleted = (data) => {
+      const { ok, researchGroup } = data.createResearchGroup;
+      if (ok) {
+        login(this);
+        window.location = researchGroup.detailUrl;
+      }
+    };
+
     this.areas = [
       { id: 1, nombre: 'Artes' },
       { id: 2, nombre: 'Ciencias Exactas' },
@@ -67,13 +90,34 @@ class CosmodoxGroupRegister extends PageViewElement {
     ];
   }
 
+  _mutationData({ name, email, firstName, lastName, password1, password2 } = {}) {
+    return {
+      name,
+      owner: { email, lastName, firstName, password1, password2 },
+    };
+  }
+
   createAccount() {
     const form = this.shadowRoot.querySelector('iron-form');
     if (form.validate()) {
-      console.log('valid');
-      window.location = '/profile';
-      // Inscribe @to_do terminar
+      this.variables = { input: this._mutationData(form.serializeForm()) };
+      console.log(this.variables);
+      // this.mutate();
     }
+  }
+}
+
+window.customElements.define('research-group-register-form', ResearchGroupRegisterForm);
+
+class CosmodoxGroupRegister extends PageViewElement {
+  render() {
+    return html`
+      ${SharedStyles}
+      <section>
+        <h2>Nuevo grupo</h2>
+        <research-group-register-form></research-group-register-form>
+      </section>
+    `;
   }
 }
 

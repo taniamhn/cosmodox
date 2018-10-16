@@ -50,12 +50,15 @@ class ReasearchGroupSerializer(serializers.ModelSerializer):
     
     @transaction.atomic
     def create(self, validated_data):
-        user_serializer = UserSerializer(data=validated_data.pop('owner'))
+        owner = validated_data.pop('owner')
+        user_serializer = UserSerializer(data=owner)
         user_serializer.is_valid()
         user = user_serializer.save()
         areas = validated_data.pop('areas')
         group = ResearchGroup.objects.create(owner=user, **validated_data)
         group.areas = areas
+        user = authenticate(email=owner['email'], password=owner['password1'])
+        login(self.context['request'], user)
         return group
 
 
@@ -69,12 +72,15 @@ class PersonalAccountSerializer(serializers.ModelSerializer):
     
     @transaction.atomic
     def create(self, validated_data):
-        user_serializer = UserSerializer(data=validated_data.pop('user'))
+        owner = validated_data.pop('owner')
+        user_serializer = UserSerializer(data=owner)
         user_serializer.is_valid()
         user = user_serializer.save()
         areas = validated_data.pop('areas')
         account = Personal.objects.create(user=user, **validated_data)
         account.areas = areas
+        user = authenticate(email=owner['email'], password=owner['password1'])
+        login(self.context['request'], user)
         return account
 
 # EDIT SERIALIZERS
