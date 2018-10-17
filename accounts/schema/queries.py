@@ -49,6 +49,7 @@ class PersonalAccountList(DjangoListObjectType):
 
 class User(DjangoObjectType):
 
+    fullName = graphene.String(source='get_full_name')
     profile = graphene.Field(Profile, source='profile')
 
     class Meta:

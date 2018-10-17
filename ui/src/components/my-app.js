@@ -15,7 +15,7 @@ import { installOfflineWatcher } from 'pwa-helpers/network.js';
 import { installRouter } from 'pwa-helpers/router.js';
 import { updateMetadata } from 'pwa-helpers/metadata.js';
 import { routeToPage } from '../routes.js';
-import { menuIcon } from './my-icons.js';
+import { menuIcon, exitIcon } from './my-icons.js';
 import { checkAuth } from '../auth.js';
 import '../client.js';
 
@@ -95,7 +95,7 @@ class MyApp extends LitElement {
         border-bottom: 4px solid var(--app-header-selected-color);
       }
 
-      .menu-btn {
+      .toolbar-btn {
         background: none;
         border: none;
         fill: var(--app-header-text-color);
@@ -176,8 +176,9 @@ class MyApp extends LitElement {
     <!-- Header -->
     <app-header condenses reveals effects="waterfall">
       <app-toolbar class="toolbar-top">
-        <button class="menu-btn" title="Menu" @click="${_ => this._updateDrawerState(true)}">${menuIcon}</button>
+        <button class="menu-btn toolbar-btn" title="Menu" @click="${_ => this._updateDrawerState(true)}">${menuIcon}</button>
         <div main-title>${appTitle}</div>
+        <button class="toolbar-btn" title="Logout" @click="${_ => console.log('logout')}">${exitIcon}</button>
       </app-toolbar>
 
       <!-- This gets hidden on a small screen-->
@@ -275,8 +276,7 @@ class MyApp extends LitElement {
   }
 
   _locationChanged() {
-    const path = window.decodeURIComponent(window.location.pathname);
-    const page = routeToPage(path, this._isAuthenticated);
+    const page = routeToPage(location, this._isAuthenticated);
     this._loadPage(page);
     // Any other info you might want to extract from the path (like page type),
     // you can do here.
