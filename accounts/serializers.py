@@ -89,7 +89,12 @@ class EditUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name']
+        fields = ['email', 'first_name', 'last_name']
+        extra_kwargs = {
+            'email': { 'validators': [] }
+        }
+    
+    # TODO validate uniqueness of email
 
     @transaction.atomic
     def update(self, instance, validated_data):
@@ -105,7 +110,7 @@ class EditInstitutionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Institution
-        fields = ['name', 'owner']
+        fields = ['id', 'name', 'owner']
 
     @transaction.atomic
     def update(self, instance, validated_data):
@@ -124,7 +129,7 @@ class EditResearchGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ResearchGroup
-        fields = ['name', 'owner', 'areas', 'institution']
+        fields = ['id', 'name', 'owner', 'areas', 'institution']
 
     @transaction.atomic
     def update(self, instance, validated_data):
@@ -145,7 +150,7 @@ class EditPersonalAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Personal
-        fields = ['user', 'areas', 'education_level']
+        fields = ['id', 'user', 'areas', 'education_level']
 
     @transaction.atomic
     def update(self, instance, validated_data):

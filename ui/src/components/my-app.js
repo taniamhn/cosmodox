@@ -29,7 +29,7 @@ import './snack-bar.js';
 
 class MyApp extends LitElement {
   render() {
-    const {appTitle, _page, _drawerOpened, _snackbarOpened, _offline, _isAuthenticated} = this;
+    const {appTitle, _page, _drawerOpened, _snackbarOpened, _offline, _isAuthenticated, _params} = this;
     // Anything that's related to rendering should be done in here.
     return html`
     <style>
@@ -203,7 +203,7 @@ class MyApp extends LitElement {
       <cosmodox-institution-register class="page" ?active="${_page === 'institution-register'}"></cosmodox-institution-register>
       <cosmodox-profile class="page" ?active="${_page === 'profile'}"></cosmodox-profile>
       <cosmodox-research-group class="page" ?active="${_page === 'research-group'}"></cosmodox-research-group>
-      <cosmodox-institution class="page" ?active="${_page === 'institution'}"></cosmodox-institution>
+      <cosmodox-institution class="page" ?active="${_page === 'institution'}" .params="${_params}"></cosmodox-institution>
       <cosmodox-project class="page" ?active="${_page === 'project'}"></cosmodox-project>
       <my-view404 class="page" ?active="${_page === 'view404'}"></my-view404>
     </main>
@@ -224,7 +224,8 @@ class MyApp extends LitElement {
       _drawerOpened: { type: Boolean },
       _snackbarOpened: { type: Boolean },
       _offline: { type: Boolean },
-      _isAuthenticated: { type: Boolean }
+      _isAuthenticated: { type: Boolean },
+      _params: { type: Object },
     }
   }
 
@@ -276,8 +277,8 @@ class MyApp extends LitElement {
   }
 
   _locationChanged() {
-    const page = routeToPage(location, this._isAuthenticated);
-    this._loadPage(page);
+    const { page, params } = routeToPage(location, this._isAuthenticated);
+    this._loadPage(page, params);
     // Any other info you might want to extract from the path (like page type),
     // you can do here.
 
@@ -291,7 +292,7 @@ class MyApp extends LitElement {
     }
   }
 
-  _loadPage(page) {
+  _loadPage(page, params) {
     switch(page) {
       case 'home':
         import('../components/cosmodox-home.js');
@@ -322,6 +323,7 @@ class MyApp extends LitElement {
         import('../components/my-view404.js');
     }
 
+    this._params = params;
     this._page = page;
   }
 }

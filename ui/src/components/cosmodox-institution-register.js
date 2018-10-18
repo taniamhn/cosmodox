@@ -13,10 +13,10 @@ import { ApolloMutation } from 'lit-apollo/apollo-mutation';
 import { PageViewElement } from './page-view-element.js';
 import { login } from '../auth.js';
 import '@polymer/iron-form/iron-form.js';
+import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-password-field.js';
-import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
