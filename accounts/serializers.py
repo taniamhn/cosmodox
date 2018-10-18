@@ -72,7 +72,7 @@ class PersonalAccountSerializer(serializers.ModelSerializer):
     
     @transaction.atomic
     def create(self, validated_data):
-        owner = validated_data.pop('owner')
+        owner = validated_data.pop('user')
         user_serializer = UserSerializer(data=owner)
         user_serializer.is_valid()
         user = user_serializer.save()
@@ -146,7 +146,7 @@ class EditResearchGroupSerializer(serializers.ModelSerializer):
 
 class EditPersonalAccountSerializer(serializers.ModelSerializer):
 
-    owner = EditUserSerializer()
+    user = EditUserSerializer()
 
     class Meta:
         model = Personal

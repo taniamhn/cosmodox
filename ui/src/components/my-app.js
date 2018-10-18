@@ -201,7 +201,7 @@ class MyApp extends LitElement {
       <cosmodox-user-register class="page" ?active="${_page === 'user-register'}"></cosmodox-user-register>
       <cosmodox-group-register class="page" ?active="${_page === 'group-register'}"></cosmodox-group-register>
       <cosmodox-institution-register class="page" ?active="${_page === 'institution-register'}"></cosmodox-institution-register>
-      <cosmodox-profile class="page" ?active="${_page === 'profile'}"></cosmodox-profile>
+      <cosmodox-profile class="page" ?active="${_page === 'profile'}" .params="${_params}"></cosmodox-profile>
       <cosmodox-research-group class="page" ?active="${_page === 'research-group'}" .params="${_params}"></cosmodox-research-group>
       <cosmodox-institution class="page" ?active="${_page === 'institution'}" .params="${_params}"></cosmodox-institution>
       <cosmodox-project class="page" ?active="${_page === 'project'}"></cosmodox-project>

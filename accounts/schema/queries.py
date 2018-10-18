@@ -46,9 +46,19 @@ class ResearchGroupList(DjangoListObjectType):
 
 class PersonalAccount(DjangoObjectType):
 
+    areas = graphene.List(Area)
+    research_groups = graphene.List(ResearchGroup)
+    education_level_label = graphene.String(source='get_education_level_display')
+
     class Meta:
         model = models.Personal
         interfaces = [Profile]
+    
+    def resolve_areas(self, info, **kwargs):
+        return self.areas.all()
+
+    def resolve_research_groups(self, info, **kwargs):
+        return self.research_groups.all()
 
 
 class PersonalAccountList(DjangoListObjectType):

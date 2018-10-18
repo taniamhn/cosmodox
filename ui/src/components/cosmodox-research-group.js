@@ -17,8 +17,6 @@ import '@polymer/iron-form/iron-form.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
 import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
-import '@vaadin/vaadin-checkbox/theme/material/vaadin-checkbox.js';
-import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import './institutions-combo.js';
 import './areas-checkbox.js';
@@ -87,7 +85,7 @@ class EditResearchGroupForm extends ApolloMutation {
     this.client = Apollo.client;
     this.mutation = editMutation;
     this.onCompleted = (data) => {
-      const { ok, researchGroup } = data.updateResearchGroup;
+      const { ok } = data.updateResearchGroup;
       if (ok) {
         this._fireEndEditingEvent();
       }
