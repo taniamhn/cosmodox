@@ -1,3 +1,4 @@
+import graphene
 from graphene_django_extras import (
     DjangoObjectType, DjangoListObjectType, DjangoObjectField, DjangoListObjectField
 )
@@ -5,6 +6,8 @@ from .. import models
 
 
 class Project(DjangoObjectType):
+
+    detail_url = graphene.String(source='detail_url')
 
     class Meta:
         model = models.Project

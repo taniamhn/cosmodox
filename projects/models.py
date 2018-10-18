@@ -24,6 +24,9 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    def detail_url(self):
+        return '/project/{}'.format(self.id)
+
 
 class ProjectUpdate(models.Model):
 
