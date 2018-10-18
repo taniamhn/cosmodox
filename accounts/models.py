@@ -27,6 +27,9 @@ class Institution(models.Model):
     
     def detail_url(self):
         return '/institution/{}'.format(self.id)
+    
+    def can_edit(self, user):
+        return user.id == self.owner_id
 
 
 class ResearchGroup(models.Model):
@@ -41,6 +44,9 @@ class ResearchGroup(models.Model):
     
     def detail_url(self):
         return '/research-group/{}'.format(self.id)
+    
+    def can_edit(self, user):
+        return user.id == self.owner_id
 
 
 class Personal(models.Model):
@@ -70,3 +76,6 @@ class Personal(models.Model):
     
     def detail_url(self):
         return '/profile/{}'.format(self.id)
+    
+    def can_edit(self, user):
+        return user.id == self.user_id

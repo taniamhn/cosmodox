@@ -74,6 +74,7 @@ class UpdateResearchGroupMutation(DjangoSerializerMutation):
         serializer_class = serializers.EditResearchGroupSerializer
         only_fields = serializers.EditResearchGroupSerializer.Meta.fields
         input_field_name = 'input'
+        output_field_name = 'research_group'
         nested_fields = ['owner']
 
 class UpdatePersonalAccountMutation(DjangoSerializerMutation):

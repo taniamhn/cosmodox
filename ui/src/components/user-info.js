@@ -22,17 +22,17 @@ class UserInfo extends LitElement {
           height: 100px;
         }
       </style>
-      <iron-image src="${user.image}" placeholder="../images/profile-none.png" sizing="cover" preload fade></iron-image>
-      <div class="name">${user.nombreCompleto}</div>
+      <iron-image src="${user.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
+      <div class="name">${user.fullName}</div>
     `;
   }
 
   static get properties() {
     return {
       user: { type: Object },
-    }
+    };
   }
-  
+
   constructor() {
     super();
     this.user = {};

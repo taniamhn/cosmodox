@@ -9,14 +9,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 import { html } from '@polymer/lit-element';
+import { ApolloQuery } from 'lit-apollo/apollo-query.js';
+import { ApolloMutation } from 'lit-apollo/apollo-mutation.js';
 import { PageViewElement } from './page-view-element.js';
 import { addIcon, editIcon } from './my-icons.js';
 import '@polymer/iron-form/iron-form.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
+import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-checkbox/theme/material/vaadin-checkbox.js';
 import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
+import './institutions-combo.js';
+import './areas-checkbox.js';
 import './project-info.js';
 import './new-project.js';
 import './user-info.js';
@@ -24,113 +29,210 @@ import './user-info.js';
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
 
-class CosmodoxResearchGroup extends PageViewElement {
+const editMutation = Apollo.gql`
+  mutation updateResearchGroup($input: ResearchGroupUpdateGenericType!) {
+    updateResearchGroup(input: $input) {
+      ok
+      errors { field, messages }
+      researchGroup {
+        id
+        name
+        areas { id, name }
+        institution { id, name, detailUrl }
+        owner { id, email, firstName, lastName, fullName }
+      }
+    }
+  }
+`;
+
+const editButtonText = loading => html`${loading ? html`<concrete-loading-icon></concrete-loading-icon>` : html`Editar`}`;
+
+class EditResearchGroupForm extends ApolloMutation {
   render() {
-    const { areas, researchGroup, editing } = this;
+    const { loading, researchGroup } = this;
+    const { owner, institution } = researchGroup;
+    const areas = researchGroup.areas || [];
 
     return html`
-      ${SharedStyles}
       <style>
-        iron-image {
-          width: 150px;
-          height: 150px;
+        form {
+          display: grid;
         }
       </style>
-      <section>
-        <h2>Grupo de investigación</h2>
-        ${editing 
-          ? html`
-            <iron-form>
-              <form>
-                <vaadin-text-field label="Nombre" required value="${researchGroup.nombre}"></vaadin-text-field>
-                <vaadin-text-field label="Email" type="email" required value="${researchGroup.email}"></vaadin-text-field>
-                <vaadin-combo-box label="Institucion" value="${researchGroup.institucion}"></vaadin-combo-box> <br>
-                <label>Áreas de enfoque *</label> <br>
-                ${areas.map((area) => html`<vaadin-checkbox ?checked="${this._groupInterestInArea(area, researchGroup.areas)}" value="${area.id}">${area.nombre}</vaadin-checkbox>`)}
-              </form>
-            </iron-form>
-            
-            <paper-button @click="${() => this.editProfile()}">editar</paper-button>
-            <paper-button @click="${() => this.editing = false}">cancelar</paper-button>
-          `
-          :
-          html`
-            <paper-button @click="${() => this.editing = true}">${editIcon}</paper-button> <br>
-            <iron-image src="${researchGroup.image}" placeholder="../images/profile-none.png" sizing="cover" preload fade></iron-image>
-            <p>
-              ${researchGroup.nombre} <br>
-              ${researchGroup.email} <br>
-              ${researchGroup.institucion} <br>
-            </p>
-            <h3>Áreas de enfoque</h3>
-            <ul>${researchGroup.areas.map((area) => html`<li>${area.nombre}</li>`)}</ul>
-          `
-        }
-      </section>
-      <section>
-        <h3>Integrantes</h3>
-        <ul>${researchGroup.integrantes.map((integrante) => html`<user-info .user=${integrante}></user-info>`)}</ul>
-      </section>
-      <section>
-        <h3>Proyectos</h3>
-        <paper-button @click="${() => this.shadowRoot.querySelector('new-project').opened = true}">${addIcon} nuevo</paper-button>
-        <ul>${researchGroup.projects.map((project) => html`<li><project-info .project=${project}></project-info></li>`)}</ul>
-        <new-project></new-project>
-      </section>
-    `
+      <iron-form>
+        <form>
+          <vaadin-text-field name="name" label="Nombre del grupo" required .value="${researchGroup.name}"></vaadin-text-field>
+          <vaadin-text-field name="email" label="Email" type="email" required .value="${owner.email}"></vaadin-text-field>
+          <vaadin-text-field name="firstName" label="Nombre del lider" required .value="${owner.firstName}"></vaadin-text-field>
+          <vaadin-text-field name="lastName" label="Apellido del lider" required .value="${owner.lastName}"></vaadin-text-field>
+          <institutions-combo name="institution" required .value="${institution.id}"></institutions-combo>
+          <areas-checkbox name="areas" .value="${areas.map(a => a.id)}"></areas-checkbox>
+          <div>
+            <vaadin-button @click="${() => this._fireEndEditingEvent()}">Cancelar</vaadin-button>
+            <vaadin-button @click="${() => this.editAccount()}">${editButtonText(loading)}</vaadin-button>
+          </div>
+        </form>
+      </iron-form>  
+    `;
   }
 
   static get properties() {
     return {
-      areas: { type: Array },
       researchGroup: { type: Object },
-      editing: { type: Boolean },
-    }
+    };
   }
 
   constructor() {
     super();
-    this.areas = [
-      { id: 1, nombre: 'Artes' },
-      { id: 2, nombre: 'Ciencias Exactas' },
-      { id: 3, nombre: 'Emprendimiento' },
-      { id: 4, nombre: 'Lenguas y cultura' },
-      { id: 5, nombre: 'Pensamiento global' },
-      { id: 6, nombre: 'Tecnología' },
-      { id: 7, nombre: 'Otros' },
-    ];
-    this.editing = false;
-    this.researchGroup = {
-      image: '/',
-      nombre: 'Mariana',
-      email: 'mariana@oquendo.com',
-      institucion: 'La enseñanza',
-      areas: [
-        { id: 1, nombre: 'Tecnologia' },
-      ],
-      integrantes: [
-        { nombreCompleto: 'Arly Mendoza' },
-        { nombreCompleto: 'Maria Gallego' },
-      ],
-      projects: [
-        { image: '/', name: 'cosmodox', theme: 'projects' },
-        { image: '/', name: 'project 2', theme: 'theme' },
-        { image: '/', name: 'project 3', theme: 'theme' },
-      ]
+    this.client = Apollo.client;
+    this.mutation = editMutation;
+    this.onCompleted = (data) => {
+      const { ok, researchGroup } = data.updateResearchGroup;
+      if (ok) {
+        this._fireEndEditingEvent();
+      }
     };
   }
 
-  _groupInterestInArea(area, groupAreas) {
-    return !!groupAreas.find((elem) => elem.id === area.id);
+  _mutationData({ id, name, areas, institution, email, firstName, lastName } = {}) {
+    return {
+      id,
+      name,
+      areas,
+      institution,
+      owner: { email, lastName, firstName },
+    };
   }
 
-  editProfile() {
+  _fireEndEditingEvent() {
+    this.dispatchEvent(new CustomEvent('end-editing'));
+  }
+
+  editAccount() {
     const form = this.shadowRoot.querySelector('iron-form');
+    const areasCheckbox = form.querySelector('areas-checkbox');
+    const institutionsCombo = form.querySelector('institutions-combo');
     if (form.validate()) {
-      console.log('valid');
-      // TODO actual editing
-      this.editing = false;
+      const input = this._mutationData({
+        ...form.serializeForm(),
+        id: this.researchGroup.id,
+        areas: areasCheckbox.value,
+        institution: institutionsCombo.value,
+      });
+      this.variables = { input };
+      this.mutate();
     }
+  }
+}
+
+window.customElements.define('edit-research-group-form', EditResearchGroupForm);
+
+const researchGroupQuery = Apollo.gql`
+  query researchGroupDetailQuery($id: ID!){
+    researchGroup(id: $id) {
+      id
+      name
+      canEdit
+      areas { id, name }
+      members { id, user { id, fullName }}
+      institution { id, name , detailUrl }
+      owner { id, email, firstName, lastName, fullName }
+    }
+  }
+`;
+
+const researchGroupInfo = (researchGroup, changeEdit) => {
+  const areas = researchGroup.areas || [];
+  const institution = researchGroup.institution || {};
+  const owner = researchGroup.owner || {};
+
+  return html`
+    <paper-button ?hidden="${!researchGroup.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button> <br>
+    <iron-image src="${researchGroup.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
+    <p>
+      ${researchGroup.name} <br>
+      ${owner.email} <br>
+      <a href="${institution.detailUrl}">${institution.name}</a> <br>
+    </p>
+    <h3>Áreas de enfoque</h3>
+    <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
+  `
+};
+
+class ResearchGroupDetail extends ApolloQuery {
+  render() {
+    const { data, editing } = this;
+    const researchGroup = data && data.researchGroup ? data.researchGroup : { owner: {}, institution: {} };
+    const members = researchGroup.members || [];
+    const projects = researchGroup.projects || [];
+
+    return html`
+      ${SharedStyles}
+      <section>
+        <h2>Grupo de investigación</h2>
+        ${editing 
+            ? html`<edit-research-group-form .researchGroup="${researchGroup}" @end-editing="${() => this._changeEditing(false)}"></edit-research-group-form>`
+            : researchGroupInfo(researchGroup, this._changeEditing.bind(this))
+         }
+      </section>
+      <section>
+        <h3>Integrantes</h3>
+        <ul>
+          <li><user-info .user="${researchGroup.owner}"></user-info></li>
+          ${members.map((member) => html`<li><user-info .user=${member.user}></user-info></li>`)}
+        </ul>
+      </section>
+      <section>
+        <h3>Proyectos</h3>
+        <paper-button ?hidden="${!researchGroup.canEdit}" @click="${() => this.shadowRoot.querySelector('new-project').opened = true}">${addIcon} nuevo</paper-button>
+        <ul>${projects.map((project) => html`<li><project-info .project=${project}></project-info></li>`)}</ul>
+        <new-project></new-project>
+      </section>
+    `;
+  }
+
+  static get properties() {
+    return {
+      editing: { type: Boolean },
+    };
+  }
+
+  constructor() {
+    super();
+    this.editing = false;
+    this.client = Apollo.client;
+    this.query = researchGroupQuery;
+  }
+
+  shouldUpdate(changedProperties) {
+    return super.shouldUpdate(changedProperties) || (changedProperties.has('editing') && !!this.data);
+  }
+
+  set researchGroupId(id) {
+    this.variables = { id };
+  }
+
+  _changeEditing(value) {
+    this.editing = value;
+  }
+}
+
+window.customElements.define('research-group-detail', ResearchGroupDetail);
+
+class CosmodoxResearchGroup extends PageViewElement {
+  render() {
+    const { params } = this;
+
+    return html`
+      ${SharedStyles}
+      <research-group-detail .researchGroupId="${params.id}"></research-group-detail>
+    ` 
+  }
+
+  static get properties() {
+    return {
+      params: { type: Object },
+    };
   }
 }
 

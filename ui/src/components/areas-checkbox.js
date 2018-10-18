@@ -22,19 +22,34 @@ const areasQuery = Apollo.gql`
 
 class AreasCheckbox extends ApolloQuery {
   render() {
-    const { data } = this;
+    const { data, _value } = this;
     const areas = data.areas.results;
 
     return html`
       <label>Áreas de enfoque</label> <br>
-      ${areas.map(area => html`<vaadin-checkbox value="${area.id}">${area.name}</vaadin-checkbox>`)} <br>
+      ${areas.map(area => html`<vaadin-checkbox ?checked="${_value.includes(area.id)}" value="${area.id}">${area.name}</vaadin-checkbox>`)} <br>
     `;
+  }
+
+  static get properties() {
+    return {
+      _value: { type: Array },
+    };
   }
 
   constructor() {
     super();
+    this._value = [];
     this.client = Apollo.client;
     this.query = areasQuery;
+  }
+
+  shouldUpdate(changedProperties) {
+    return super.shouldUpdate(changedProperties) || (changedProperties.has('_value') && !!this.data);
+  }
+
+  set value(value) {
+    this._value = value;
   }
 
   get value() {

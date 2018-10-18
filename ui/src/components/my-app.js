@@ -202,7 +202,7 @@ class MyApp extends LitElement {
       <cosmodox-group-register class="page" ?active="${_page === 'group-register'}"></cosmodox-group-register>
       <cosmodox-institution-register class="page" ?active="${_page === 'institution-register'}"></cosmodox-institution-register>
       <cosmodox-profile class="page" ?active="${_page === 'profile'}"></cosmodox-profile>
-      <cosmodox-research-group class="page" ?active="${_page === 'research-group'}"></cosmodox-research-group>
+      <cosmodox-research-group class="page" ?active="${_page === 'research-group'}" .params="${_params}"></cosmodox-research-group>
       <cosmodox-institution class="page" ?active="${_page === 'institution'}" .params="${_params}"></cosmodox-institution>
       <cosmodox-project class="page" ?active="${_page === 'project'}"></cosmodox-project>
       <my-view404 class="page" ?active="${_page === 'view404'}"></my-view404>

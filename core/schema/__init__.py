@@ -1,3 +1,3 @@
-from .queries import Query
+from .queries import Query, Area
 
-__all__ = (Query, )
+__all__ = (Query, Area)

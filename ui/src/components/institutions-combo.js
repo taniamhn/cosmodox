@@ -31,14 +31,15 @@ class InstitutionsCombo extends ApolloQuery {
           width: 100%;
         }
       </style>
-      <vaadin-combo-box .items="${institutions}" ?required="${required}" 
-        label="Institución"  item-label-path="name" item-value-path="id">
+      <vaadin-combo-box .items="${institutions}" ?required="${required}" .value="${this._value}"
+        label="Institución"  item-label-path="name" item-value-path="id" @change="${(e) => { this.value = e.target.value; }}">
       </vaadin-combo-box>
     `;
   }
 
   static get properties() {
     return {
+      _value: { type: String },
       required: { type: Boolean },
     };
   }
@@ -51,12 +52,15 @@ class InstitutionsCombo extends ApolloQuery {
   }
 
   shouldUpdate(changedProperties) {
-    return super.shouldUpdate(changedProperties) || (changedProperties.has('required') && !!this.data);
+    return super.shouldUpdate(changedProperties) || ((changedProperties.has('_value') || changedProperties.has('required')) && !!this.data);
+  }
+
+  set value(value) {
+    this._value = value;
   }
 
   get value() {
-    const comboBox = this.shadowRoot.querySelector('vaadin-combo-box');
-    return comboBox ? comboBox.value : '';
+    return this._value;
   }
 
   validate() {

@@ -2,12 +2,17 @@ import graphene
 from graphene_django_extras import (
     DjangoObjectType, DjangoListObjectType, DjangoObjectField, DjangoListObjectField
 )
+from core.schema import Area
 from .. import models
 
 class Profile(graphene.Interface):
 
+    can_edit = graphene.Boolean()
     id = graphene.ID(required=True)
     detail_url = graphene.String(source='detail_url')
+
+    def resolve_can_edit(self, info, **kwargs):
+        return self.can_edit(info.context.user)
 
 
 class Institution(DjangoObjectType):
@@ -24,9 +29,14 @@ class InstitutionList(DjangoListObjectType):
 
 class ResearchGroup(DjangoObjectType):
 
+    areas = graphene.List(Area)
+
     class Meta:
         model = models.ResearchGroup
         interfaces = [Profile]
+    
+    def resolve_areas(self, info, **kwargs):
+        return self.areas.all()
 
 
 class ResearchGroupList(DjangoListObjectType):

@@ -10,12 +10,13 @@ const _privateRoutes = {
   '^\\/profile$': 'profile',
   '^\\/project$': 'project',
   '^\\/institution\\/(?<id>\\d+)$': 'institution',
-  '^\\/research-group$': 'research-group',
+  '^\\/research-group\\/(?<id>\\d+)$': 'research-group',
 };
 
 const _getPageFromPath = (path, routes) => {
   const key = Object.keys(routes).filter(e => (new RegExp(e, 'm')).test(path));
-  const params = path.match(new RegExp(key, 'm')).groups;
+  const match = path.match(new RegExp(key, 'm'));
+  const params = match ? match.groups : null;
   return { params, page: routes[key] };
 };
 

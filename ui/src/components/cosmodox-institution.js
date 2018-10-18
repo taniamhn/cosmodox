@@ -16,7 +16,6 @@ import { editIcon } from './my-icons.js';
 import '@polymer/iron-form/iron-form.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-checkbox/paper-checkbox.js';
 import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-checkbox/theme/material/vaadin-checkbox.js';
 import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box.js';
@@ -37,7 +36,6 @@ const editMutation = Apollo.gql`
         id
         name
         owner { id, email, firstName, lastName, fullName }
-        researchGroups { id, name }
       }
     }
   }
@@ -49,6 +47,7 @@ class EditInstitutionForm extends ApolloMutation {
   render() {
     const { loading, institution } = this;
     const { owner } = institution;
+  
     return html`
       <style>
         form {
@@ -116,14 +115,15 @@ const institutionQuery = Apollo.gql`
     institution(id: $id) {
       id
       name
+      canEdit
       owner { id, email, firstName, lastName, fullName }
-      researchGroups { id, name }
+      researchGroups { id, name, detailUrl }
     }
   }
 `;
 
 const institutionInfo = (institution, changeEdit) => html`
-  <paper-button @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
+  <paper-button ?hidden="${!institution.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
   <br>
   <iron-image src="${institution.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
   <p>
@@ -186,6 +186,7 @@ window.customElements.define('institution-detail', InstitutionDetail);
 class CosmodoxInstitution extends PageViewElement {
   render() {
     const { params } = this;
+
     return html`
       ${SharedStyles}
       <institution-detail .institutionId="${params.id}"></institution-detail>
