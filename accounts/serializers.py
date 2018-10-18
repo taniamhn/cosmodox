@@ -169,10 +169,10 @@ class JoinResearchGroupSerializer(serializers.ModelSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=ResearchGroup.objects.all())
 
     class Meta:
-        model = ResearchGroup
+        model = User
         fields = ['group']
     
     @transaction.atomic
     def update(self, instance, validated_data):
-        instance.research_groups.add(validated_data['group'])
+        instance.personal.research_groups.add(validated_data['group'])
         return instance

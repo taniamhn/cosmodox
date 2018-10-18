@@ -31,8 +31,8 @@ class CreateResearchGroupMutation(DjangoSerializerMutation):
     class Meta:
         serializer_class = serializers.ReasearchGroupSerializer
         only_fields = serializers.ReasearchGroupSerializer.Meta.fields
-        input_field_name = 'input'
         output_field_name = 'research_group'
+        input_field_name = 'input'
         nested_fields = ['owner']
     
     @classmethod
@@ -73,8 +73,8 @@ class UpdateResearchGroupMutation(DjangoSerializerMutation):
     class Meta:
         serializer_class = serializers.EditResearchGroupSerializer
         only_fields = serializers.EditResearchGroupSerializer.Meta.fields
-        input_field_name = 'input'
         output_field_name = 'research_group'
+        input_field_name = 'input'
         nested_fields = ['owner']
 
 class UpdatePersonalAccountMutation(DjangoSerializerMutation):

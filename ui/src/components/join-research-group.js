@@ -9,26 +9,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 import { LitElement, html } from '@polymer/lit-element';
+import { ApolloMutation } from 'lit-apollo/apollo-mutation';
 import '@polymer/iron-form/iron-form.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-dialog/paper-dialog.js';
+import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
 
-class JoinResearchGroup extends LitElement {
+const joinGroupMutation = Apollo.gql`
+  mutation joinResearchGroup($input: JoinResearchGroupInput!) {
+    joinResearchGroup(input: $input) {
+      ok
+      errors { field, messages }
+    }
+  }
+`;
+
+const joinButtonText = loading => html`${loading ? html`<concrete-loading-icon></concrete-loading-icon>` : 'unirse'}`;
+
+class JoinResearchGroup extends ApolloMutation {
   render() {
-    const { opened } = this;
+    const { opened, loading } = this;
 
     return html`
+      <style>
+        paper-dialog {
+          width: 60%;
+        }
+      </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Unirse a grupo</h2>
         <iron-form>
           <form>
-            <paper-input label="Grupo de investigación *" required></paper-input>
+            <paper-input name="group" label="Grupo de investigación *" required></paper-input>
           </form>
         </iron-form>
         <div class="buttons">
-          <vaadin-button @click="${() => this.opened = false}">Cancelar</vaadin-button>
-          <vaadin-button @click="${() => this.joinGroup()}">Unirse</vaadin-button>
+          <vaadin-button @click="${() => { this.opened = false; }}">Cancelar</vaadin-button>
+          <vaadin-button @click="${() => this.joinGroup()}">${joinButtonText(loading)}</vaadin-button>
         </div>
       </paper-dialog>
     `;
@@ -37,19 +55,32 @@ class JoinResearchGroup extends LitElement {
   static get properties() {
     return {
       opened: { type: Boolean },
-    }
+    };
   }
-  
+
   constructor() {
     super();
     this.opened = false;
+    this.client = Apollo.client;
+    this.mutation = joinGroupMutation;
+    this.refetchQueries = ['personalAccountDetail'];
+    this.onCompleted = (data) => {
+      const { ok } = data.joinResearchGroup;
+      if (ok) {
+        this.opened = false;
+      }
+    };
+  }
+
+  _mutationData({ group } = {}) {
+    return { input: { group } };
   }
 
   joinGroup() {
     const form = this.shadowRoot.querySelector('iron-form');
     if (form.validate()) {
-      console.log('valid');
-      this.opened = false;
+      this.variables = this._mutationData(form.serializeForm());
+      this.mutate();
     }
   }
 }

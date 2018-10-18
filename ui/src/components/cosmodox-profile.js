@@ -127,7 +127,7 @@ class EditUserForm extends ApolloMutation {
 window.customElements.define('edit-user-form', EditUserForm);
 
 const personalAccountQuery = Apollo.gql`
-  query personalAccountDetailQuery($id: ID!){
+  query personalAccountDetail($id: ID!){
     personalAccount(id: $id) {
       id
       canEdit
@@ -174,10 +174,10 @@ class PersonalAccountDetail extends ApolloQuery {
          }
       </section>
       <section>
-      <h3>Grupos de investigación</h3>
-      <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => this.shadowRoot.querySelector('join-research-group').opened = true}">unirse</paper-button>
-      <ul>${researchGroups.map((group) => html`<li><a href="${group.detailUrl}">${group.name}</a></li>`)}</ul>
-      <join-research-group></join-research-group>
+        <h3>Grupos de investigación</h3>
+        <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => this.shadowRoot.querySelector('join-research-group').opened = true}">unirse</paper-button>
+        <ul>${researchGroups.map((group) => html`<li><a href="${group.detailUrl}">${group.name}</a></li>`)}</ul>
+        <join-research-group></join-research-group>
       </section>
       <section>
         <h3>Proyectos</h3>

@@ -17,8 +17,8 @@ import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-password-field.js';
-import './areas-checkbox.js';
 import './education-levels-combo.js';
+import './areas-checkbox.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
