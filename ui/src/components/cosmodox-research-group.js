@@ -126,7 +126,7 @@ class EditResearchGroupForm extends ApolloMutation {
 window.customElements.define('edit-research-group-form', EditResearchGroupForm);
 
 const researchGroupQuery = Apollo.gql`
-  query researchGroupDetailQuery($id: ID!){
+  query researchGroupDetail($id: ID!){
     researchGroup(id: $id) {
       id
       name

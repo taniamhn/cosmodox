@@ -35,8 +35,8 @@ class Institution(models.Model):
 class ResearchGroup(models.Model):
 
     name = models.CharField(max_length=100)
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL)
     areas = models.ManyToManyField('core.Area', related_name='research_groups')
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='research_group')
     institution = models.ForeignKey(Institution, related_name='research_groups', blank=True, null=True)
 
     def __str__(self):

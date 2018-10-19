@@ -12,18 +12,18 @@ import { html } from '@polymer/lit-element';
 import { ApolloQuery } from 'lit-apollo/apollo-query.js';
 import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box.js';
 
-const educationLevelsQuery = Apollo.gql`
-  query educationLevelsCombo {
-    educationLevels: __type(name: "PersonalEducationLevelEnum") {
+const projectStateQuery = Apollo.gql`
+  query projectStateCombo {
+    states: __type(name: "ProjectStateEnum") {
       enumValues { value: name, description }
     }
   }
 `;
 
-class EducationLevelsCombo extends ApolloQuery {
+class ProjectStatesCombo extends ApolloQuery {
   render() {
     const { data, required } = this;
-    const educationLevels = data.educationLevels.enumValues;
+    const states = data.states.enumValues;
 
     return html`
       <style>
@@ -31,8 +31,8 @@ class EducationLevelsCombo extends ApolloQuery {
           width: 100%;
         }
       </style>
-      <vaadin-combo-box .items="${educationLevels}" ?required="${required}" .value="${this._value}" 
-        label="Nivel educativo"  item-label-path="description" item-value-path="value" @change="${(e) => { this.value = e.target.value; }}">
+      <vaadin-combo-box .items="${states}" ?required="${required}" .value="${this._value}" 
+        label="Estado"  item-label-path="description" item-value-path="value" @change="${(e) => { this.value = e.target.value; }}">
       </vaadin-combo-box>
     `;
   }
@@ -48,7 +48,7 @@ class EducationLevelsCombo extends ApolloQuery {
     super();
     this.required = false;
     this.client = Apollo.client;
-    this.query = educationLevelsQuery;
+    this.query = projectStateQuery;
   }
 
   shouldUpdate(changedProperties) {
@@ -68,4 +68,4 @@ class EducationLevelsCombo extends ApolloQuery {
   }
 }
 
-window.customElements.define('education-levels-combo', EducationLevelsCombo);
+window.customElements.define('project-states-combo', ProjectStatesCombo);

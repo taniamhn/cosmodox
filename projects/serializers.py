@@ -19,6 +19,23 @@ class ProjectSerializer(serializers.ModelSerializer):
         project.areas = areas
         return project
 
+class UpdateProjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = [
+            'id', 'state', 'name', 'theme', 'description', 'areas', 'vinculated_institutions'
+        ]
+
+        @transaction.atomic
+        def update(self, instance, validated_data):
+            areas = validated_data.pop('areas')
+            for name, value in validated_data.items():
+                setattr(instance, name, value)
+            instance.save()
+            instance.areas = areas
+            return instance
+
 
 class ProjectUpdateSerializer(serializers.ModelSerializer):
 

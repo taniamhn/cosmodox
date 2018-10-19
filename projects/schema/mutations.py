@@ -14,6 +14,14 @@ class CreateProjectMutation(DjangoSerializerMutation):
     def get_serializer_kwargs(cls, root, info, **kwargs):
         return {'context': {'request': info.context}}
 
+class UpdateProjectMutation(DjangoSerializerMutation):
+
+    class Meta:
+        serializer_class = serializers.UpdateProjectSerializer
+        only_fields = serializers.UpdateProjectSerializer.Meta.fields
+        input_field_name = 'input'
+
+
 class CreateProjectUpdateMutation(DjangoSerializerMutation):
 
     class Meta:
@@ -28,4 +36,5 @@ class CreateProjectUpdateMutation(DjangoSerializerMutation):
 
 class Mutation:
     create_project = CreateProjectMutation.CreateField(description='Creates a project')
+    update_project = UpdateProjectMutation.UpdateField(description='Updates a project')
     create_project_update = CreateProjectUpdateMutation.CreateField(description='Creates a project update')

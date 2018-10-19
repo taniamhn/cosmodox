@@ -26,6 +26,9 @@ class Project(models.Model):
 
     def detail_url(self):
         return '/project/{}'.format(self.id)
+    
+    def can_edit(self, user):
+        return user.id == self.owner_id
 
 
 class ProjectUpdate(models.Model):
@@ -34,6 +37,9 @@ class ProjectUpdate(models.Model):
     created_at = models.DateField(auto_now_add=True)
     project = models.ForeignKey(Project, related_name='updates')
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='project_updates')
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return '{} Update #{}'.format(self.project, self.id)
