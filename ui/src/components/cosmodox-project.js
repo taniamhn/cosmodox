@@ -22,10 +22,9 @@ import '@vaadin/vaadin-checkbox/theme/material/vaadin-checkbox.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-area.js';
 import './project-states-combo.js';
-import './join-research-group.js';
+import './project-update-info.js';
+import './new-project-update.js';
 import './areas-checkbox.js';
-import './project-info.js';
-import './new-project.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
@@ -206,10 +205,11 @@ class ProjectDetail extends ApolloQuery {
       </section>
       <section>
         <h3>Actualizaciones</h3>
-        <div>
-          <h6>purfect</h6>
-          <p></p>
-        </div>
+        <paper-button ?hidden="${!project.canEdit}" @click="${() => this.shadowRoot.querySelector('new-project-update').opened = true}">${addIcon} nueva</paper-button>
+        <ul>
+          ${updates.map(update => html`<li><project-update-info .projectUpdate="${update}"></project-update-info></li>`)}
+        </ul>
+        <new-project-update .projectId="${project.id}"></new-project-update>
       </section>
     `;
   }

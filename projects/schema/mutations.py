@@ -27,6 +27,7 @@ class CreateProjectUpdateMutation(DjangoSerializerMutation):
     class Meta:
         serializer_class = serializers.ProjectUpdateSerializer
         only_fields = serializers.ProjectUpdateSerializer.Meta.fields
+        output_field_name = 'project_update'
         input_field_name = 'input'
 
     @classmethod
