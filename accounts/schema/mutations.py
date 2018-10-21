@@ -1,4 +1,5 @@
 import graphene
+from django.contrib.auth import logout
 from graphene_django_extras import DjangoSerializerMutation, DjangoInputObjectType
 from .. import serializers
 
@@ -106,6 +107,14 @@ class JoinResearchGroupMutation(DjangoSerializerMutation):
         kwargs[cls._meta.input_field_name].update({'id': info.context.user.id})
         return super().save_mutation(root, info, **kwargs)
 
+class LogoutMutation(graphene.Mutation):
+
+    ok = graphene.Boolean()
+
+    def mutate(self, info):
+        logout(info.context)
+        return LogoutMutation(ok=True)
+
 
 class Mutation:
     create_institution = CreateInstitutionMutation.CreateField(description='Creates an institution')
@@ -116,3 +125,5 @@ class Mutation:
     update_research_group = UpdateResearchGroupMutation.UpdateField(description='Updates a research group')
     update_personal_account = UpdatePersonalAccountMutation.UpdateField(description='Updates a personal account')
     join_research_group = JoinResearchGroupMutation.UpdateField(description='Join the user to a research group')
+
+    logout = LogoutMutation.Field()

@@ -16,7 +16,7 @@ import { installRouter } from 'pwa-helpers/router.js';
 import { updateMetadata } from 'pwa-helpers/metadata.js';
 import { routeToPage } from '../routes.js';
 import { menuIcon, exitIcon } from './my-icons.js';
-import { checkAuth } from '../auth.js';
+import { checkAuth, logout } from '../auth.js';
 import '../client.js';
 
 // These are the elements needed by this element.
@@ -178,7 +178,7 @@ class MyApp extends LitElement {
       <app-toolbar class="toolbar-top">
         <button class="menu-btn toolbar-btn" title="Menu" @click="${_ => this._updateDrawerState(true)}">${menuIcon}</button>
         <div main-title>${appTitle}</div>
-        <button class="toolbar-btn" title="Logout" @click="${_ => console.log('logout')}">${exitIcon}</button>
+        <button class="toolbar-btn" title="Logout" @click="${_ => logout(this)}">${exitIcon}</button>
       </app-toolbar>
 
       <!-- This gets hidden on a small screen-->
