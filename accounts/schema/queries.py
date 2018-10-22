@@ -44,6 +44,7 @@ class ResearchGroupList(DjangoListObjectType):
     class Meta:
         model = models.ResearchGroup
 
+
 class PersonalAccount(DjangoObjectType):
 
     areas = graphene.List(Area)
@@ -77,8 +78,12 @@ class User(DjangoObjectType):
 
 class Query:
     user = DjangoObjectField(User)
+    current_user = graphene.Field(User)
     institution = DjangoObjectField(Institution)
     research_group = DjangoObjectField(ResearchGroup)
     personal_account = DjangoObjectField(PersonalAccount)
 
     institutions = DjangoListObjectField(InstitutionList)
+
+    def resolve_current_user(self, info, **kwargs):
+        return info.context.user if info.context.user.is_authenticated() else None

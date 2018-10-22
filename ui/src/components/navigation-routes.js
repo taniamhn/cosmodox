@@ -9,27 +9,77 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 import { LitElement, html } from '@polymer/lit-element';
+import { ApolloQuery } from 'lit-apollo/apollo-query.js';
 
-const notAuthenticatedRoutes = (page) => {
+const profileRouteQuery = Apollo.gql`
+  query currentUser {
+    currentUser {
+      id
+      profile { id, detailUrl }
+    }
+  }
+`;
+
+class ProfileRoute extends ApolloQuery {
+  render() {
+    const { data, selected } = this;
+    const currentUser = data && data.currentUser ? data.currentUser : { profile: {} };
+    const { profile = {} } = currentUser;
+
+    return html`
+      <style>
+        a {
+        display: inline-block;
+        color: var(--app-header-text-color);
+        text-decoration: none;
+      }
+
+      a[selected] {
+        color: var(--app-header-selected-color);
+      }
+      </style>
+      <a ?selected="${selected}" href="${profile.detailUrl}">Perfil</a>
+    `;
+  }
+
+  static get properties() {
+    return {
+      selected: { type: Boolean },
+    };
+  }
+
+  constructor() {
+    super();
+    this.selected = false;
+    this.client = Apollo.client;
+    this.query = profileRouteQuery;
+  }
+
+  shouldUpdate(changedProperties) {
+    return super.shouldUpdate(changedProperties) || (changedProperties.has('selected') && !!this.data);
+  }
+}
+
+window.customElements.define('profile-route', ProfileRoute);
+
+const authenticatedRoutes = (page) => {
   return html`
-    <a ?selected="${page === 'profile'}" href="/profile">Perfil</a>
-    <a ?selected="${page === 'research-group'}" href="/research-group">Grupo de investigación</a>
-    <a ?selected="${page === 'institution'}" href="/institution">Institución</a>
+    <profile-route ?selected="${['profile', 'research-group', 'institution'].includes(page)}"></profile-route>
     <a ?selected="${page === 'project'}" href="/project">Proyecto</a>
   `;
-}
+};
 
 class NavigationRoutes extends LitElement {
   render() {
     const { page, isAuthenticated } = this;
-    return html`${isAuthenticated ? notAuthenticatedRoutes(page) : html`<a ?selected="${page === 'home'}" href="/home">Home</a>`}`;
+    return html`${isAuthenticated ? authenticatedRoutes(page) : html`<a ?selected="${page === 'home'}" href="/home">Home</a>`}`;
   }
 
   static get properties() {
     return {
       page: { type: String },
       isAuthenticated: { type: Boolean },
-    }
+    };
   }
 
   constructor() {

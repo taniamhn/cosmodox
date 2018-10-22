@@ -152,15 +152,14 @@ const personalAccountInfo = (personalAccount, changeEdit) => {
     </p>
     <h3>Áreas de enfoque</h3>
     <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
-  `
+  `;
 };
 
 class PersonalAccountDetail extends ApolloQuery {
   render() {
     const { data, editing } = this;
     const personalAccount = data && data.personalAccount ? data.personalAccount : { user: {} };
-    const researchGroups = personalAccount.researchGroups || [];
-    const projects = personalAccount.projects || [];
+    const { researchGroups = [], projects = [] } = personalAccount;
     
     return html`
       ${SharedStyles}

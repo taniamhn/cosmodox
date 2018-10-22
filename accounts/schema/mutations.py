@@ -1,7 +1,8 @@
 import graphene
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from graphene_django_extras import DjangoSerializerMutation, DjangoInputObjectType
 from .. import serializers
+from .queries import User
 
 
 class CreateUserInput(DjangoInputObjectType):
@@ -107,6 +108,26 @@ class JoinResearchGroupMutation(DjangoSerializerMutation):
         kwargs[cls._meta.input_field_name].update({'id': info.context.user.id})
         return super().save_mutation(root, info, **kwargs)
 
+
+class LoginMutation(graphene.Mutation):
+
+    class Arguments:
+        email = graphene.String(required=True)
+        password = graphene.String(required=True)
+    
+    ok = graphene.Boolean()
+    user = graphene.Field(User)
+
+    def mutate(self, info, email, password):
+        ok = False
+        user = authenticate(info.context, email=email, password=password)
+        if user is not None:
+            login(info.context, user)
+            ok = True
+        
+        return LoginMutation(ok=ok, user=user)
+
+
 class LogoutMutation(graphene.Mutation):
 
     ok = graphene.Boolean()
@@ -126,4 +147,5 @@ class Mutation:
     update_personal_account = UpdatePersonalAccountMutation.UpdateField(description='Updates a personal account')
     join_research_group = JoinResearchGroupMutation.UpdateField(description='Join the user to a research group')
 
+    login = LoginMutation.Field()
     logout = LogoutMutation.Field()

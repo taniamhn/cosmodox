@@ -82,7 +82,7 @@ class MyApp extends LitElement {
         display: none;
       }
 
-      .toolbar-list > navigation-routes > a {
+      .toolbar-list > navigation-routes > a, .toolbar-list > navigation-routes > profile-route {
         display: inline-block;
         color: var(--app-header-text-color);
         text-decoration: none;
@@ -90,7 +90,7 @@ class MyApp extends LitElement {
         padding: 4px 24px;
       }
 
-      .toolbar-list > navigation-routes > a[selected] {
+      .toolbar-list > navigation-routes > a[selected], .toolbar-list > navigation-routes > profile-route[selected] {
         color: var(--app-header-selected-color);
         border-bottom: 4px solid var(--app-header-selected-color);
       }
@@ -178,7 +178,7 @@ class MyApp extends LitElement {
       <app-toolbar class="toolbar-top">
         <button class="menu-btn toolbar-btn" title="Menu" @click="${_ => this._updateDrawerState(true)}">${menuIcon}</button>
         <div main-title>${appTitle}</div>
-        <button class="toolbar-btn" title="Logout" @click="${_ => logout(this)}">${exitIcon}</button>
+        <button ?hidden="${!_isAuthenticated}" class="toolbar-btn" title="Logout" @click="${_ => logout(this)}">${exitIcon}</button>
       </app-toolbar>
 
       <!-- This gets hidden on a small screen-->
