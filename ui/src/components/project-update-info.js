@@ -14,12 +14,16 @@ import '@polymer/iron-image/iron-image.js';
 class ProjectUpdateInfo extends LitElement {
   render() {
     const { projectUpdate } = this;
+    const { files = [] } = projectUpdate;
 
     return html`
       <style>
       </style>
       <div>
         <p>${projectUpdate.content}</p>
+        <ul>
+          ${files.map(f => html`<li><a target="blank" rel="external" href="/media/${f.document}">${f.document}</a></li>`)}
+        </ul>
         <time>${projectUpdate.createdAt}</time>
         <span>${projectUpdate.createdBy.fullName}</span>
       </div>

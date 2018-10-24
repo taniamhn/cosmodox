@@ -318,6 +318,8 @@ class MyApp extends LitElement {
       case 'project':
         import('../components/cosmodox-project.js');
         break;
+      case 'media':
+        return;
       default:
         page = 'view404';
         import('../components/my-view404.js');

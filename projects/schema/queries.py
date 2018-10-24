@@ -35,6 +35,12 @@ class ProjectUpdate(DjangoObjectType):
         model = models.ProjectUpdate
 
 
+class UpdateFile(DjangoListObjectType):
+
+    class Meta:
+        model = models.UpdateFile
+
+
 class Query:
     projects = DjangoListObjectField(ProjectList, description='All projects list')
     project = DjangoObjectField(Project)

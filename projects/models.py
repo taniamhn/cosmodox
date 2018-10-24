@@ -39,7 +39,16 @@ class ProjectUpdate(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='project_updates')
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-created_at', '-id']
 
     def __str__(self):
         return '{} Update #{}'.format(self.project, self.id)
+
+
+def file_path(instance, filename):
+    update = instance.update
+    return 'project_{}/update_{}/{}'.format(update.project_id, update.id, filename)
+
+class UpdateFile(models.Model):
+    update = models.ForeignKey(ProjectUpdate, related_name='files')
+    document = models.FileField(upload_to=file_path)

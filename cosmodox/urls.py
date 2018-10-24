@@ -16,17 +16,19 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf import settings
-from graphene_django_extras.views import ExtraGraphQLView
 from core import views as core_views
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^graphiql', ExtraGraphQLView.as_view(graphiql=True)),
-    url(r'^graphql', ExtraGraphQLView.as_view(), name='graphql'),
-    url('.*', core_views.IndexView.as_view(), name='index'),
-]
 
 if settings.DEBUG:
-    urlpatterns = urlpatterns + [
-        url(r'^graphiql', ExtraGraphQLView.as_view(graphiql=True)),
-    ]
+    from django.conf.urls.static import static
+
+    urlpatterns = [
+        url(r'^graphiql', core_views.GraphqlView.as_view(graphiql=True)),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns = urlpatterns + [
+    url(r'^admin/', admin.site.urls),
+    url(r'^graphiql', core_views.GraphqlView.as_view(graphiql=True)),
+    url(r'^graphql', core_views.GraphqlView.as_view(), name='graphql'),
+    url('.*', core_views.IndexView.as_view(), name='index'),
+]

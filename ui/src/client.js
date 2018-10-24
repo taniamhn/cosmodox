@@ -29,7 +29,7 @@ if (!window.Apollo.client) {
         }
         if (networkError) console.log(`[Network error]: ${networkError}`);
       }),
-      new Apollo.HttpLink({
+      Apollo.createUploadLink({
         uri: '/graphql',
         credentials: 'same-origin',
       }),

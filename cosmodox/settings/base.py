@@ -127,6 +127,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (BASE_DIR('ui/build/dev'),)
 
+# Media configuration
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR('media')
+
 # User
 
 AUTH_USER_MODEL = 'accounts.User'

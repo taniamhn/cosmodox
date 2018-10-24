@@ -11,6 +11,7 @@ const _privateRoutes = {
   '^\\/project\\/(?<id>\\d+)$': 'project',
   '^\\/institution\\/(?<id>\\d+)$': 'institution',
   '^\\/research-group\\/(?<id>\\d+)$': 'research-group',
+  '^\\/media\\/\\S*$': 'media',
 };
 
 const _getPageFromPath = (path, routes) => {

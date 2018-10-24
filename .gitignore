@@ -2,6 +2,7 @@
 .idea
 .vscode
 *.pyc
+media/
 cosmodox/settings/.env
 ui/build/
 ui/node_modules/

@@ -1,4 +1,6 @@
+import graphene
 from graphene_django_extras import DjangoSerializerMutation, DjangoInputObjectType
+from graphene_file_upload.scalars import Upload
 from .. import serializers
 from .. import models
 
@@ -20,6 +22,14 @@ class UpdateProjectMutation(DjangoSerializerMutation):
         serializer_class = serializers.UpdateProjectSerializer
         only_fields = serializers.UpdateProjectSerializer.Meta.fields
         input_field_name = 'input'
+
+class ProjectUpdateInput(DjangoInputObjectType):
+
+    files = graphene.List(graphene.NonNull(Upload))
+
+    class Meta:
+        model = serializers.ProjectUpdateSerializer.Meta.model
+        only_fields = serializers.ProjectUpdateSerializer.Meta.fields
 
 
 class CreateProjectUpdateMutation(DjangoSerializerMutation):

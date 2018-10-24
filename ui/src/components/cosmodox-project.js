@@ -142,7 +142,7 @@ const projectQuery = Apollo.gql`
       description
       vinculatedInstitutions
       areas { id, name }
-      updates { id, content, createdAt, createdBy { id, fullName } }
+      updates { id, content, createdAt, createdBy { id, fullName }, files { id, document } }
       owner {
         id
         fullName

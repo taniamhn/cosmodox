@@ -15,9 +15,10 @@ import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-dialog/paper-dialog.js';
 import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
+import '@vaadin/vaadin-upload/theme/material/vaadin-upload.js';
 
 const createMutation = Apollo.gql`
-  mutation createProjectUpdate($input: ProjectUpdateCreateGenericType!) {
+  mutation createProjectUpdate($input: ProjectUpdateInput!) {
     createProjectUpdate(input: $input) {
       ok
       errors { field, messages }
@@ -45,7 +46,8 @@ class NewProjectUpdate extends ApolloMutation {
         <h2>Nueva actualización</h2>
         <iron-form>
           <form>
-            <paper-textarea name="content" label="Contenido"></paper-textarea>
+            <paper-textarea name="content" label="Contenido *" required></paper-textarea>
+            <vaadin-upload no-auto></vaadin-upload>
           </form>
         </iron-form>
         <div class="buttons">
@@ -73,14 +75,16 @@ class NewProjectUpdate extends ApolloMutation {
       const { ok } = data.createProjectUpdate;
       if (ok) {
         this.opened = false;
-        window.location = project.detailUrl
+        this.shadowRoot.querySelector('iron-form').reset();
+        this.shadowRoot.querySelector('vaadin-upload').files = [];
       }
     };
   }
 
-  _mutationData({ content, projectId } = {}) {
+  _mutationData({ content, projectId, files } = {}) {
     return {
       input: {
+        files,
         content,
         project: projectId,
       },
@@ -89,8 +93,10 @@ class NewProjectUpdate extends ApolloMutation {
 
   createProjectUpdate() {
     const form = this.shadowRoot.querySelector('iron-form');
+    const upload = this.shadowRoot.querySelector('vaadin-upload');
     if (form.validate()) {
       this.variables = this._mutationData({
+        files: [...upload.files],
         ...form.serializeForm(),
         projectId: this.projectId,
       });

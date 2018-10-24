@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from django.core.files.base import ContentFile
 from django.db import transaction
-from .models import Project, ProjectUpdate
+from .models import Project, ProjectUpdate, UpdateFile
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -39,13 +40,19 @@ class UpdateProjectSerializer(serializers.ModelSerializer):
 
 class ProjectUpdateSerializer(serializers.ModelSerializer):
 
+    files = serializers.ListField(child=serializers.FileField(), required=False)
+
     class Meta:
         model = ProjectUpdate
-        fields = ['content', 'project']
+        fields = ['content', 'project', 'files']
     
     @transaction.atomic
     def create(self, validated_data):
         user = self.context['request'].user
+        files = validated_data.pop('files')
         update = ProjectUpdate.objects.create(created_by=user, **validated_data)
+        for _file in files:
+            f = UpdateFile(update=update)
+            f.document.save(_file.name, _file)
         return update
 
