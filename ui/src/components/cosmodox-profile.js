@@ -143,15 +143,19 @@ const personalAccountInfo = (personalAccount, changeEdit) => {
   const user = personalAccount.user || {};
 
   return html`
-    <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button> <br>
-    <iron-image src="${personalAccount.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
-    <p>
-      ${user.fullName} <br>
-      ${user.email} <br>
-      ${personalAccount.educationLevelLabel}
-    </p>
-    <h3>Áreas de enfoque</h3>
-    <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
+    <div class="basic-info">
+      <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button> <br>
+      <iron-image src="${personalAccount.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
+      <p class="basic">
+        ${user.fullName} <br>
+        ${user.email} <br>
+        ${personalAccount.educationLevelLabel}
+      </p>
+      <div class="extras">
+        <h3>Áreas de enfoque</h3>
+        <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
+      </div>
+    </div>
   `;
 };
 

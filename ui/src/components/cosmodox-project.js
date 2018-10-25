@@ -165,26 +165,30 @@ const researchGroupOwner = (group, url) => html`<span>Grupo de investigación: <
 const ownerInfo = (owner) => {
   const { profile = {} } = owner;
   const { detailUrl, __typename } = profile;
-  return __typename == 'ResearchGroup' ? personalOwner(owner, detailUrl) : researchGroupOwner(profile, detailUrl);
+  return __typename === 'ResearchGroup' ? researchGroupOwner(profile, detailUrl) : personalOwner(owner, detailUrl);
 }
 
 const projectInfo = (project, changeEdit) => {
   const { areas = [], owner = {} }  = project;
 
   return html`
-    <paper-button ?hidden="${!project.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button> <br>
-    <iron-image src="${project.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
-    <p>
-      <span>Nombre: </span>${project.name} <br>
-      <span>Tema: </span>${project.theme} <br>
-      ${ownerInfo(owner)} <br>
-      <span>Estado: </span>${project.stateLabel} <br>
-      <span>Instituciones vinculadas: </span>${project.vinculatedInstitutions} <br>
-    </p>
-    <h3>Áreas de enfoque</h3>
-    <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
-    <span>Descripción</span>
-    <p>${project.description}</p>
+    <div class="basic-info">
+      <paper-button ?hidden="${!project.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
+      <iron-image src="${project.image}" placeholder="/static/images/profile-none.png" sizing="contain" preload fade></iron-image>
+      <p class="basic">
+        <span>Nombre: </span>${project.name} <br>
+        <span>Tema: </span>${project.theme} <br>
+        ${ownerInfo(owner)} <br>
+        <span>Estado: </span>${project.stateLabel} <br>
+        <span>Instituciones vinculadas: </span>${project.vinculatedInstitutions} <br>
+      </p>
+      <div class="extra">
+        <h3>Áreas de enfoque</h3>
+        <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
+        <h3>Descripción</h3>
+        <p>${project.description}</p>
+      </div>
+    </div>
   `
 };
 

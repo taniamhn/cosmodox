@@ -145,15 +145,19 @@ const researchGroupInfo = (researchGroup, changeEdit) => {
   const owner = researchGroup.owner || {};
 
   return html`
-    <paper-button ?hidden="${!researchGroup.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button> <br>
-    <iron-image src="${researchGroup.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
-    <p>
-      ${researchGroup.name} <br>
-      ${owner.email} <br>
-      <a href="${institution.detailUrl}">${institution.name}</a> <br>
-    </p>
-    <h3>Áreas de enfoque</h3>
-    <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
+    <div class="basic-info">
+      <paper-button ?hidden="${!researchGroup.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button> <br>
+      <iron-image src="${researchGroup.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
+      <p class="basic">
+        ${researchGroup.name} <br>
+        ${owner.email} <br>
+        <a href="${institution.detailUrl}">${institution.name}</a> <br>
+      </p>
+      <div class="extra">
+        <h3>Áreas de enfoque</h3>
+        <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
+      </div>
+    </div>
   `
 };
 

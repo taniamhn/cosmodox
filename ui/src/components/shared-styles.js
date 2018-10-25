@@ -47,9 +47,41 @@ export const SharedStyles = html`
     height: 150px;
   }
 
+  .basic-info {
+    display: grid;
+  }
+
+  .basic-info iron-image {
+    width: 100%;
+  }
+
+  .basic-info h3 {
+    margin: 0;
+  }
+
   @media (min-width: 460px) {
     h2 {
       font-size: 36px;
+    }
+
+    .basic-info {
+      grid-template-columns: auto 1fr;
+      grid-gap: 10px;
+      grid-template-areas:
+        "image basic"
+        "extra extra";
+    }
+
+    .basic-info iron-image {
+      grid-area: image;
+    }
+
+    .basic-info .basic {
+      grid-area: basic;
+    }
+
+    .basic-info .extra {
+      grid-area: extra;
     }
   }
 
