@@ -2,7 +2,7 @@ import graphene
 from graphene_django_extras import (
     DjangoObjectType, DjangoListObjectType, DjangoObjectField, DjangoListObjectField
 )
-from core.schema import Area
+from core.schema import Area, File
 from .. import models
 
 
@@ -35,7 +35,15 @@ class ProjectUpdate(DjangoObjectType):
         model = models.ProjectUpdate
 
 
-class UpdateFile(DjangoListObjectType):
+class UpdateFile(DjangoObjectType):
+
+    document = graphene.Field(File, required=True)
+
+    class Meta:
+        model = models.UpdateFile
+
+
+class UpdateFileList(DjangoListObjectType):
 
     class Meta:
         model = models.UpdateFile

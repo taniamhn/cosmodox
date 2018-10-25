@@ -142,7 +142,7 @@ const projectQuery = Apollo.gql`
       description
       vinculatedInstitutions
       areas { id, name }
-      updates { id, content, createdAt, createdBy { id, fullName }, files { id, document } }
+      updates { id, content, createdAt, createdBy { id, fullName }, files { id, document { url, shortName } } }
       owner {
         id
         fullName
@@ -200,6 +200,15 @@ class ProjectDetail extends ApolloQuery {
 
     return html`
       ${SharedStyles}
+      <style>
+        .updates ul {
+
+        }
+
+        .updates li {
+          list-style-type: none;
+        }
+      </style>
       <section>
         <h2>Proyecto</h2>
         ${editing
@@ -207,7 +216,7 @@ class ProjectDetail extends ApolloQuery {
           : projectInfo(project, this._changeEditing.bind(this))
         }
       </section>
-      <section>
+      <section class="updates">
         <h3>Actualizaciones</h3>
         <paper-button ?hidden="${!project.canEdit}" @click="${() => this.shadowRoot.querySelector('new-project-update').opened = true}">${addIcon} nueva</paper-button>
         <ul>

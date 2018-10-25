@@ -9,7 +9,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 import { LitElement, html } from '@polymer/lit-element';
-import '@polymer/iron-image/iron-image.js';
+import { fileIcon } from './my-icons.js';
+
+const fileElem = (file) => {
+  return html`
+    <li class="file">
+      <a target="blank" rel="external" href="${file.url}">
+        <div>${fileIcon}</div>
+        <span>${file.shortName}</span>
+      </a>
+    </li>
+  `;
+};
 
 class ProjectUpdateInfo extends LitElement {
   render() {
@@ -18,11 +29,37 @@ class ProjectUpdateInfo extends LitElement {
 
     return html`
       <style>
+        :host {
+          display: block;
+        }
+
+        :host > div {
+          border-radius: 10px;
+          border: 1px solid;
+          padding: 10px;
+        }
+
+        p {
+          margin: 0;
+        }
+
+        li {
+          list-style-type: none;
+        }
+
+        a {
+          color: var(--app-dark-text-color);
+          text-decoration: none;
+        }
+
+        .file a {
+          display: flex;
+        }
       </style>
       <div>
         <p>${projectUpdate.content}</p>
         <ul>
-          ${files.map(f => html`<li><a target="blank" rel="external" href="/media/${f.document}">${f.document}</a></li>`)}
+          ${files.map(f => fileElem(f.document))}
         </ul>
         <time>${projectUpdate.createdAt}</time>
         <span>${projectUpdate.createdBy.fullName}</span>

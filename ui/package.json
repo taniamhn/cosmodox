@@ -33,7 +33,6 @@
   "dependencies": {
     "@polymer/app-layout": "^3.0.0",
     "@polymer/iron-form": "^3.0.1",
-    "@polymer/iron-icon": "^3.0.1",
     "@polymer/iron-image": "^3.0.1",
     "@polymer/lit-element": "^0.6.1",
     "@polymer/paper-button": "^3.0.1",
