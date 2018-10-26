@@ -22,7 +22,7 @@ class ProjectInfo extends LitElement {
           height: 100px;
         }
       </style>
-      <iron-image src="${project.image}" placeholder="../images/profile-none.png" sizing="cover" preload fade></iron-image>
+      <iron-image src="${project.image}" placeholder="/static/images/project-none.png" sizing="cover" preload fade></iron-image>
       <div class="name">${project.name}</div>
       <span class="theme">${project.theme}</span>
     `;

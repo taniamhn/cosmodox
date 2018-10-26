@@ -170,6 +170,11 @@ class ResearchGroupDetail extends ApolloQuery {
 
     return html`
       ${SharedStyles}
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
       <section>
         <h2>Grupo de investigación</h2>
         ${editing 

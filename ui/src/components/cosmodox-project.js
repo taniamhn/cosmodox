@@ -174,7 +174,7 @@ const projectInfo = (project, changeEdit) => {
   return html`
     <div class="basic-info">
       <paper-button ?hidden="${!project.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
-      <iron-image src="${project.image}" placeholder="/static/images/profile-none.png" sizing="contain" preload fade></iron-image>
+      <iron-image src="${project.image}" placeholder="/static/images/project-none.png" sizing="contain" preload fade></iron-image>
       <p class="basic">
         <span>Nombre: </span>${project.name} <br>
         <span>Tema: </span>${project.theme} <br>
@@ -201,6 +201,10 @@ class ProjectDetail extends ApolloQuery {
     return html`
       ${SharedStyles}
       <style>
+        :host {
+          display: block;
+        }
+
         .updates ul {
 
         }

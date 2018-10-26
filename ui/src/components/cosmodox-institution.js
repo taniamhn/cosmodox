@@ -123,14 +123,15 @@ const institutionQuery = Apollo.gql`
 `;
 
 const institutionInfo = (institution, changeEdit) => html`
-  <paper-button ?hidden="${!institution.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
-  <br>
-  <iron-image src="${institution.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
-  <p>
-    ${institution.name}
-    <br> ${institution.owner.email}
-    <br> ${institution.owner.fullName}
-  </p>
+  <div class="basic-info">
+    <paper-button ?hidden="${!institution.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
+    <iron-image src="${institution.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
+    <p class="basic">
+      ${institution.name}
+      <br> ${institution.owner.email}
+      <br> ${institution.owner.fullName}
+    </p>
+  </div>
 `;
 
 class InstitutionDetail extends ApolloQuery {

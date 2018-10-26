@@ -144,14 +144,14 @@ const personalAccountInfo = (personalAccount, changeEdit) => {
 
   return html`
     <div class="basic-info">
-      <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button> <br>
+      <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
       <iron-image src="${personalAccount.image}" placeholder="/static/images/profile-none.png" sizing="cover" preload fade></iron-image>
       <p class="basic">
         ${user.fullName} <br>
         ${user.email} <br>
         ${personalAccount.educationLevelLabel}
       </p>
-      <div class="extras">
+      <div class="extra">
         <h3>Áreas de enfoque</h3>
         <ul>${areas.map((area) => html`<li>${area.name}</li>`)}</ul>
       </div>

@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { html } from '@polymer/lit-element';
 
-export const SharedStyles = html`
+export default SharedStyles = html`
 <style>
   :host {
     display: block;
@@ -19,6 +19,10 @@ export const SharedStyles = html`
 
   a {
     text-decoration: none;
+  }
+
+  li {
+    list-style-type: none;
   }
 
   section {

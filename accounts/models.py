@@ -3,11 +3,14 @@ from django.conf import settings
 from django.db import models
 from .managers import UserManager
 
+def profile_img_path(instance, filename):
+    return 'profile/{}'.format(filename)
 
 class User(AbstractUser):
 
     username = None
     email = models.EmailField(unique=True)
+    image = models.ImageField(upload_to=profile_img_path, blank=True)
 
     objects = UserManager()
 
@@ -41,6 +44,9 @@ class ResearchGroup(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def projects(self):
+        return self.owner.projects.all()
     
     def detail_url(self):
         return '/research-group/{}'.format(self.id)
