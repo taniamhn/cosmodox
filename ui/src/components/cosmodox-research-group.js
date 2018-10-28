@@ -20,7 +20,7 @@ import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import './institutions-combo.js';
 import './areas-checkbox.js';
-import './project-info.js';
+import './project-list.js';
 import './new-project.js';
 import './user-info.js';
 
@@ -132,8 +132,9 @@ const researchGroupQuery = Apollo.gql`
       name
       canEdit
       areas { id, name }
-      members { id, user { id, fullName }}
+      members { id, user { id, fullName } }
       institution { id, name , detailUrl }
+      projects { id, name, detailUrl, image { url } }
       owner { id, email, firstName, lastName, fullName }
     }
   }
@@ -192,7 +193,7 @@ class ResearchGroupDetail extends ApolloQuery {
       <section>
         <h3>Proyectos</h3>
         <paper-button ?hidden="${!researchGroup.canEdit}" @click="${() => this.shadowRoot.querySelector('new-project').opened = true}">${addIcon} nuevo</paper-button>
-        <ul>${projects.map((project) => html`<li><project-info .project=${project}></project-info></li>`)}</ul>
+        <project-list .projects="${projects}"></project-list>
         <new-project></new-project>
       </section>
     `;

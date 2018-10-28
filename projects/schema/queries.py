@@ -9,6 +9,7 @@ from .. import models
 class Project(DjangoObjectType):
     
     areas = graphene.List(Area)
+    image = graphene.Field(File)
     can_edit = graphene.Boolean()
     detail_url = graphene.String(source='detail_url')
     state_label = graphene.String(source='get_state_display')
@@ -21,12 +22,19 @@ class Project(DjangoObjectType):
 
     def resolve_areas(self, info, **kwargs):
         return self.areas.all()
+    
+    def resolve_image(self, info, **kwargs):
+        if not self.image:
+            return None
+        
+        return self.image
 
 
 class ProjectList(DjangoListObjectType):
 
     class Meta:
         model = models.Project
+        filter_fields = ['id']
 
 
 class ProjectUpdate(DjangoObjectType):

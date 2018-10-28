@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { html } from '@polymer/lit-element';
 
-export default SharedStyles = html`
+export const SharedStyles = html`
 <style>
   :host {
     display: block;
@@ -69,7 +69,7 @@ export default SharedStyles = html`
     }
 
     .basic-info {
-      grid-template-columns: auto 1fr;
+      grid-template-columns: 1fr 3fr;
       grid-gap: 10px;
       grid-template-areas:
         "image basic"

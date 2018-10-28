@@ -80,6 +80,9 @@ class Personal(models.Model):
     def __str__(self):
         return self.user.get_full_name()
     
+    def projects(self):
+        return self.user.projects.all()
+    
     def detail_url(self):
         return '/profile/{}'.format(self.id)
     

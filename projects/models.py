@@ -2,6 +2,9 @@ from django.conf import settings
 from django.db import models
 
 
+def project_img_path(instance, filename):
+    return 'projects/{}'.format(filename)
+
 class Project(models.Model):
 
     COMPLETED = 'C'
@@ -18,6 +21,7 @@ class Project(models.Model):
     description = models.TextField(blank=True)
     areas = models.ManyToManyField('core.Area')
     vinculated_institutions = models.TextField(blank=True)
+    image = models.ImageField(upload_to=project_img_path, blank=True)
     state = models.CharField(max_length=2, choices=STATES, default=IN_PROCESS)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='projects')
 

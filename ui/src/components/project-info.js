@@ -14,26 +14,47 @@ import '@polymer/iron-image/iron-image.js';
 class ProjectInfo extends LitElement {
   render() {
     const { project } = this;
+    const image = project.image || {};
 
     return html`
       <style>
+        :host {
+          display: block;
+        }
+
+        a {
+          text-decoration: none;
+          color: var(--primary-text-color);
+        }
+
         iron-image {
           width: 100px;
           height: 100px;
         }
+
+        .main {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        }
       </style>
-      <iron-image src="${project.image}" placeholder="/static/images/project-none.png" sizing="cover" preload fade></iron-image>
-      <div class="name">${project.name}</div>
-      <span class="theme">${project.theme}</span>
+
+      <a href="${project.detailUrl}">
+        <div class="main">
+          <iron-image src="${image.url}" placeholder="/static/images/project-none.png" sizing="cover" preload fade></iron-image>
+          <div class="name">${project.name}</div>
+          <span class="theme">${project.theme}</span>
+        </div>
+      </a>
     `;
   }
 
   static get properties() {
     return {
       project: { type: Object },
-    }
+    };
   }
-  
+
   constructor() {
     super();
     this.project = {};

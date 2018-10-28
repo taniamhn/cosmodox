@@ -2,7 +2,8 @@ import graphene
 from graphene_django_extras import (
     DjangoObjectType, DjangoListObjectType, DjangoObjectField, DjangoListObjectField
 )
-from core.schema import Area
+from projects.schema import Project
+from core.schema import Area, File
 from .. import models
 
 class Profile(graphene.Interface):
@@ -29,6 +30,7 @@ class InstitutionList(DjangoListObjectType):
 
 class ResearchGroup(DjangoObjectType):
 
+    projects = graphene.List(Project, source='projects')
     areas = graphene.List(Area)
 
     class Meta:
@@ -49,6 +51,7 @@ class PersonalAccount(DjangoObjectType):
 
     areas = graphene.List(Area)
     research_groups = graphene.List(ResearchGroup)
+    projects = graphene.List(Project, source='projects')
     education_level_label = graphene.String(source='get_education_level_display')
 
     class Meta:
@@ -70,6 +73,7 @@ class PersonalAccountList(DjangoListObjectType):
 
 class User(DjangoObjectType):
 
+    image = graphene.Field(File)
     fullName = graphene.String(source='get_full_name')
     profile = graphene.Field(Profile, source='profile')
 

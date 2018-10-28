@@ -20,9 +20,9 @@ import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import './education-levels-combo.js';
 import './join-research-group.js';
-import './new-project.js';
-import './project-info.js';
 import './areas-checkbox.js';
+import './new-project.js';
+import './project-list.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
@@ -132,8 +132,14 @@ const personalAccountQuery = Apollo.gql`
       educationLevel
       educationLevelLabel
       areas { id, name }
-      researchGroups { id, name, detailUrl }
+      projects { id, name, detailUrl, image { url } }
       user { id, email, firstName, lastName, fullName }
+      researchGroups { 
+        id
+        name
+        detailUrl
+        projects { id, name, detailUrl, image { url } }
+      }
     }
   }
 `;
@@ -175,16 +181,23 @@ class PersonalAccountDetail extends ApolloQuery {
          }
       </section>
       <section>
-        <h3>Grupos de investigación</h3>
-        <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => this.shadowRoot.querySelector('join-research-group').opened = true}">unirse</paper-button>
-        <ul>${researchGroups.map((group) => html`<li><a href="${group.detailUrl}">${group.name}</a></li>`)}</ul>
-        <join-research-group></join-research-group>
+        <h3>Proyectos personales</h3>
+        <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => this.shadowRoot.querySelector('new-project').opened = true}">${addIcon} nuevo</paper-button>
+        <project-list .projects="${projects}"></project-list>
+        <new-project></new-project>        
       </section>
       <section>
-        <h3>Proyectos</h3>
-        <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => this.shadowRoot.querySelector('new-project').opened = true}">${addIcon} nuevo</paper-button>
-        <ul>${projects.map((project) => html`<li><project-info .project=${project}></project-info></li>`)}</ul>
-        <new-project></new-project>
+        <h3>Grupos de investigación</h3>
+        <paper-button ?hidden="${!personalAccount.canEdit}" @click="${() => this.shadowRoot.querySelector('join-research-group').opened = true}">unirse</paper-button>
+        <ul>${researchGroups.map((group) => {
+          const { projects = [] } = group;
+          return html`
+            <li>
+              <a href="${group.detailUrl}"><span class="group">${group.name}</span></a>
+              <project-list .projects="${projects}"></project-list>
+            </li>`
+        })}</ul>
+        <join-research-group></join-research-group>
       </section>
     `;
   }
