@@ -136,7 +136,7 @@ def provision():
         run('cd ui && npm install')
         run('cd ui && npm run build:static')
         run('./manage.py check')
-        run('./manage.py migrate_schemas --shared')
+        run('./manage.py migrate')
         run('./manage.py collectstatic --noinput')
 
     config_services()
@@ -155,7 +155,7 @@ def deploy():
         run('pip install -r requirements/production.txt')
         run('cd ui && npm install')
         run('cd ui && npm run build:static')
-        run('./manage.py migrate_schemas')
+        run('./manage.py migrate')
         run('./manage.py collectstatic --noinput')
 
     restart_server()
