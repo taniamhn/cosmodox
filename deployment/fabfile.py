@@ -67,7 +67,7 @@ def update_source():
 def config_gunicorn():
     file_ = 'gunicorn_start'
     with cd('{}/bin'.format(SITE_FOLDER)):
-        sudo('cp {}/deploy_tools/gunicorn.template.conf {}'.format(PROJECT_ROOT, file_))
+        sudo('cp {}/deployment/gunicorn.template.conf {}'.format(PROJECT_ROOT, file_))
         sed(file_, 'PROJECT_ROOT', PROJECT_ROOT)
         sed(file_, 'SITE_FOLDER', SITE_FOLDER)
         sed(file_, 'SITENAME', env.site)
@@ -83,7 +83,7 @@ def config_services():
 
     for service in ('nginx', 'supervisor'):
         with cd('/etc/{}/'.format(service)):
-            sudo('cp {}/deploy_tools/{}.template.conf {}'.format(PROJECT_ROOT, service, CONFIG_FILES[service]))
+            sudo('cp {}/deployment/{}.template.conf {}'.format(PROJECT_ROOT, service, CONFIG_FILES[service]))
             sed(CONFIG_FILES[service], 'HOSTNAME', env.settings['allowed_host'], use_sudo=True, shell=True)
             sed(CONFIG_FILES[service], 'PROJECT_ROOT', PROJECT_ROOT, use_sudo=True, shell=True)
             sed(CONFIG_FILES[service], 'SITE_FOLDER', SITE_FOLDER, use_sudo=True, shell=True)
@@ -118,21 +118,21 @@ def production():
 def provision():
     """Provision a new site on an already provision server."""
 
-    # for subfolder in ('static', 'media', 'src', 'bin', 'tmp/sockets', 'tmp/logs'):
-    #     run("mkdir -p {}/{}".format(SITE_FOLDER, subfolder))
+    for subfolder in ('static', 'media', 'src', 'bin', 'tmp/sockets', 'tmp/logs'):
+        run("mkdir -p {}/{}".format(SITE_FOLDER, subfolder))
 
-    # run('git clone {} {}'.format(REPO_URL, PROJECT_ROOT))
+    run('git clone {} {}'.format(REPO_URL, PROJECT_ROOT))
 
-    # #  Create virtualenv
-    # run('mkvirtualenv {}'.format(env.site))
-    # with cd(PROJECT_ROOT):
-    #     with virtualenv():
-    #         run('setvirtualenvproject')
+    #  Create virtualenv
+    run('mkvirtualenv {}'.format(env.site))
+    with cd(PROJECT_ROOT):
+        with virtualenv():
+            run('setvirtualenvproject')
 
-    # set_env_variables()
-    # update_source()
+    set_env_variables()
+    update_source()
     with virtualenv():
-        # run('pip install -r requirements/production.txt')
+        run('pip install -r requirements/production.txt')
         run('./manage.py check')
         run('./manage.py migrate')
         run('./manage.py collectstatic --noinput')
