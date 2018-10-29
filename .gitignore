@@ -2,6 +2,7 @@
 .idea
 .vscode
 *.pyc
+deployment/steps.py
 media/
 cosmodox/settings/.env
 ui/build/
