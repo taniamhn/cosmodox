@@ -5,7 +5,7 @@
 deployment/steps.py
 media/
 cosmodox/settings/.env
-ui/build/
+ui/build/dev
 ui/node_modules/
 ui/test/integration/screenshots-current/
 ui/_site/

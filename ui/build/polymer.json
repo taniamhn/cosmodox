@@ -1,0 +1,59 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/components/my-app.js",
+  "fragments": [],
+  "sources": [
+    "images/**/*",
+    "index.html",
+    "src/components/my-app.js"
+  ],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/**",
+    "push-manifest.json",
+    "apollo-client.js"
+  ],
+  "builds": [
+    {
+      "name": "dev",
+      "basePath": "/static",
+      "browserCapabilities": [
+        "es2015",
+        "modules"
+      ],
+      "js": {
+        "minify": false
+      },
+      "css": {
+        "minify": false
+      },
+      "html": {
+        "minify": false
+      },
+      "bundle": false,
+      "addServiceWorker": false
+    },
+    {
+      "name": "prod",
+      "browserCapabilities": [
+        "es2015",
+        "modules"
+      ],
+      "js": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
+    }
+  ],
+  "npm": true,
+  "componentDir": "node_modules/",
+  "moduleResolution": "node"
+}

@@ -118,23 +118,21 @@ def production():
 def provision():
     """Provision a new site on an already provision server."""
 
-    for subfolder in ('static', 'media', 'src', 'bin', 'tmp/sockets', 'tmp/logs'):
-        run("mkdir -p {}/{}".format(SITE_FOLDER, subfolder))
+    # for subfolder in ('static', 'media', 'src', 'bin', 'tmp/sockets', 'tmp/logs'):
+    #     run("mkdir -p {}/{}".format(SITE_FOLDER, subfolder))
 
-    run('git clone {} {}'.format(REPO_URL, PROJECT_ROOT))
+    # run('git clone {} {}'.format(REPO_URL, PROJECT_ROOT))
 
-    #  Create virtualenv
-    run('mkvirtualenv {}'.format(env.site))
-    with cd(PROJECT_ROOT):
-        with virtualenv():
-            run('setvirtualenvproject')
+    # #  Create virtualenv
+    # run('mkvirtualenv {}'.format(env.site))
+    # with cd(PROJECT_ROOT):
+    #     with virtualenv():
+    #         run('setvirtualenvproject')
 
-    set_env_variables()
-    update_source()
+    # set_env_variables()
+    # update_source()
     with virtualenv():
-        run('pip install -r requirements/production.txt')
-        run('cd ui && npm install')
-        run('cd ui && npm run build:static')
+        # run('pip install -r requirements/production.txt')
         run('./manage.py check')
         run('./manage.py migrate')
         run('./manage.py collectstatic --noinput')
@@ -153,8 +151,6 @@ def deploy():
     update_source()
     with virtualenv():
         run('pip install -r requirements/production.txt')
-        run('cd ui && npm install')
-        run('cd ui && npm run build:static')
         run('./manage.py migrate')
         run('./manage.py collectstatic --noinput')
 

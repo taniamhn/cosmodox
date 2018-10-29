@@ -4,6 +4,7 @@ DEBUG = False
 
 # Static files
 STATICFILES_DIRS = (BASE_DIR('ui/build/prod'),)
+MEDIA_ROOT = BASE_DIR('../media')
 
 #  Ssl configuration
 
