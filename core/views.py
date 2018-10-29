@@ -9,7 +9,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         kwargs.update({
-            'isAuthenticated': self.request.user.is_authenticated
+            'isAuthenticated': 1 if self.request.user.is_authenticated else 0
         })
         return super().get_context_data(**kwargs)
 

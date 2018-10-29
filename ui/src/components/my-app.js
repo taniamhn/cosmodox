@@ -220,12 +220,13 @@ class MyApp extends LitElement {
   static get properties() {
     return {
       appTitle: { type: String },
+      serverAuth: { type: String },
       _page: { type: String },
+      _params: { type: Object },
+      _offline: { type: Boolean },
       _drawerOpened: { type: Boolean },
       _snackbarOpened: { type: Boolean },
-      _offline: { type: Boolean },
       _isAuthenticated: { type: Boolean },
-      _params: { type: Object },
     }
   }
 
@@ -237,6 +238,12 @@ class MyApp extends LitElement {
     // See https://www.polymer-project.org/3.0/docs/devguide/settings#setting-passive-touch-gestures
     setPassiveTouchGestures(true);
     this.addEventListener('authentication-change', (e) => this._isAuthenticated = e.detail.status);
+  }
+
+  set serverAuth(value) {
+    console.log('server auth');
+    console.log(!!value);
+    // this._isAuthenticated = value;
   }
 
   firstUpdated() {
