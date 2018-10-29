@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from core import views as core_views
 
+urlpatterns = []
 
 if settings.DEBUG:
     from django.conf.urls.static import static
