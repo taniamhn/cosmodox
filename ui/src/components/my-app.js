@@ -338,7 +338,7 @@ class MyApp extends LitElement {
 
     this._params = params;
     this._page = page;
-    gtag('config', 'UA-128378086-1', { 'page_path': `/${page}` });
+    // gtag('config', 'UA-128378086-1', { 'page_path': `/${page}` });
   }
 }
 
