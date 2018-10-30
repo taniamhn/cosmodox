@@ -33,7 +33,7 @@ import{LitElement,html,ApolloQuery,ApolloMutation,PageViewElement,addIcon,editIc
           <vaadin-text-field name="email" label="Email" type="email" required .value="${owner.email}"></vaadin-text-field>
           <vaadin-text-field name="firstName" label="Nombre del lider" required .value="${owner.firstName}"></vaadin-text-field>
           <vaadin-text-field name="lastName" label="Apellido del lider" required .value="${owner.lastName}"></vaadin-text-field>
-          <institutions-combo name="institution" required .value="${institution.id}"></institutions-combo>
+          <institutions-combo name="institution" .value="${institution.id}"></institutions-combo>
           <areas-checkbox name="areas" .value="${areas.map(a=>a.id)}"></areas-checkbox>
           <div>
             <vaadin-button @click="${()=>this._fireEndEditingEvent()}">Cancelar</vaadin-button>

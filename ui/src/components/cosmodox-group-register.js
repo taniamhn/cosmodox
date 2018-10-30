@@ -51,7 +51,7 @@ class ResearchGroupRegisterForm extends ApolloMutation {
           <vaadin-text-field name="email" label="Email" type="email" required></vaadin-text-field>
           <vaadin-text-field name="firstName" label="Nombre del lider" required></vaadin-text-field>
           <vaadin-text-field name="lastName" label="Apellido del lider" required></vaadin-text-field>
-          <institutions-combo name="institution" required></institutions-combo>
+          <institutions-combo name="institution"></institutions-combo>
           <areas-checkbox name="areas"></areas-checkbox>
           <vaadin-password-field name="password1" label="Contraseña" required></vaadin-password-field>
           <vaadin-password-field name="password2" label="Confirmar contraseña" required></vaadin-password-field>
