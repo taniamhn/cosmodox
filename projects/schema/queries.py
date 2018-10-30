@@ -11,6 +11,7 @@ class Project(DjangoObjectType):
     areas = graphene.List(Area)
     image = graphene.Field(File)
     can_edit = graphene.Boolean()
+    can_add_update = graphene.Boolean()
     detail_url = graphene.String(source='detail_url')
     state_label = graphene.String(source='get_state_display')
 
@@ -19,6 +20,9 @@ class Project(DjangoObjectType):
     
     def resolve_can_edit(self, info, **kwargs):
         return self.can_edit(info.context.user)
+    
+    def resolve_can_add_update(self, info, **kwargs):
+        return self.can_add_update(info.context.user)
 
     def resolve_areas(self, info, **kwargs):
         return self.areas.all()

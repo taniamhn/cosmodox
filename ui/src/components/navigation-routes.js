@@ -65,7 +65,7 @@ window.customElements.define('profile-route', ProfileRoute);
 const authenticatedRoutes = (page) => {
   return html`
     <profile-route ?selected="${['profile', 'research-group', 'institution'].includes(page)}"></profile-route>
-    <a ?selected="${page === 'project'}" href="/project">Proyecto</a>
+    <a ?selected="${page === 'projects'}" href="/projects">Proyectos</a>
   `;
 };
 

@@ -33,7 +33,9 @@ class Project(models.Model):
     
     def can_edit(self, user):
         return user.id == self.owner_id
-
+    
+    def can_add_update(self, user):
+        return user.id == self.owner_id
 
 class ProjectUpdate(models.Model):
 

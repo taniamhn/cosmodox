@@ -205,6 +205,7 @@ class MyApp extends LitElement {
       <cosmodox-research-group class="page" ?active="${_page === 'research-group'}" .params="${_params}"></cosmodox-research-group>
       <cosmodox-institution class="page" ?active="${_page === 'institution'}" .params="${_params}"></cosmodox-institution>
       <cosmodox-project class="page" ?active="${_page === 'project'}" .params="${_params}"></cosmodox-project>
+      <cosmodox-projects class="page" ?active="${_page === 'projects'}"></cosmodox-projects>
       <my-view404 class="page" ?active="${_page === 'view404'}"></my-view404>
     </main>
 
@@ -242,8 +243,8 @@ class MyApp extends LitElement {
 
   set serverAuth(value) {
     console.log('server auth');
-    console.log(!!value);
-    // this._isAuthenticated = value;
+    console.log(value);
+    this._isAuthenticated = value === '1' ? true : false;
   }
 
   firstUpdated() {
@@ -325,8 +326,11 @@ class MyApp extends LitElement {
       case 'project':
         import('../components/cosmodox-project.js');
         break;
+      case 'projects':
+        import('../components/cosmodox-projects.js');
+        break;
       case 'media':
-        return;
+        break;
       default:
         page = 'view404';
         import('../components/my-view404.js');
@@ -334,6 +338,7 @@ class MyApp extends LitElement {
 
     this._params = params;
     this._page = page;
+    gtag('config', 'UA-128378086-1', { 'page_path': `/${page}` });
   }
 }
 

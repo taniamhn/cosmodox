@@ -140,6 +140,7 @@ const projectQuery = Apollo.gql`
       canEdit
       stateLabel
       description
+      canAddUpdate
       vinculatedInstitutions
       areas { id, name }
       updates { id, content, createdAt, createdBy { id, fullName }, files { id, document { url, shortName } } }
@@ -210,6 +211,7 @@ class ProjectDetail extends ApolloQuery {
         }
 
         .updates li {
+          margin-bottom: 10px;
           list-style-type: none;
         }
       </style>
@@ -222,7 +224,7 @@ class ProjectDetail extends ApolloQuery {
       </section>
       <section class="updates">
         <h3>Actualizaciones</h3>
-        <paper-button ?hidden="${!project.canEdit}" @click="${() => this.shadowRoot.querySelector('new-project-update').opened = true}">${addIcon} nueva</paper-button>
+        <paper-button ?hidden="${!project.canAddUpdate}" @click="${() => this.shadowRoot.querySelector('new-project-update').opened = true}">${addIcon} nueva</paper-button>
         <ul>
           ${updates.map(update => html`<li><project-update-info .projectUpdate="${update}"></project-update-info></li>`)}
         </ul>

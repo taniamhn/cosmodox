@@ -7,6 +7,7 @@ const _routes = {
 };
 
 const _privateRoutes = {
+  '^\\/projects$': 'projects',
   '^\\/profile\\/(?<id>\\d+)$': 'profile',
   '^\\/project\\/(?<id>\\d+)$': 'project',
   '^\\/institution\\/(?<id>\\d+)$': 'institution',

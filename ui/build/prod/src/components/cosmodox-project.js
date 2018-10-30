@@ -782,6 +782,7 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
       canEdit
       stateLabel
       description
+      canAddUpdate
       vinculatedInstitutions
       areas { id, name }
       updates { id, content, createdAt, createdBy { id, fullName }, files { id, document { url, shortName } } }
@@ -829,6 +830,7 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
         }
 
         .updates li {
+          margin-bottom: 10px;
           list-style-type: none;
         }
       </style>
@@ -838,7 +840,7 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
       </section>
       <section class="updates">
         <h3>Actualizaciones</h3>
-        <paper-button ?hidden="${!project.canEdit}" @click="${()=>this.shadowRoot.querySelector("new-project-update").opened=!0}">${addIcon} nueva</paper-button>
+        <paper-button ?hidden="${!project.canAddUpdate}" @click="${()=>this.shadowRoot.querySelector("new-project-update").opened=!0}">${addIcon} nueva</paper-button>
         <ul>
           ${updates.map(update=>html$1`<li><project-update-info .projectUpdate="${update}"></project-update-info></li>`)}
         </ul>
