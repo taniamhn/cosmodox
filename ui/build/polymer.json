@@ -36,6 +36,7 @@
     },
     {
       "name": "prod",
+      "basePath": "/static",
       "browserCapabilities": [
         "es2015",
         "modules"
