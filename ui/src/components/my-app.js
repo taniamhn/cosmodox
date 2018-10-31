@@ -242,8 +242,6 @@ class MyApp extends LitElement {
   }
 
   set serverAuth(value) {
-    console.log('server auth');
-    console.log(value);
     this._isAuthenticated = value === '1' ? true : false;
   }
 

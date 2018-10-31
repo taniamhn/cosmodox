@@ -1716,6 +1716,49 @@
     </style>
   </template>
 </dom-module>`;document.head.appendChild($_documentContainer.content);Polymer$1({_template:html`
+    <style>
+
+      :host {
+        display: block;
+        @apply --layout-relative;
+      }
+
+      :host(.is-scrolled:not(:first-child))::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--divider-color);
+      }
+
+      :host(.can-scroll:not(.scrolled-to-bottom):not(:last-child))::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--divider-color);
+      }
+
+      .scrollable {
+        padding: 0 24px;
+
+        @apply --layout-scroll;
+        @apply --paper-dialog-scrollable;
+      }
+
+      .fit {
+        @apply --layout-fit;
+      }
+    </style>
+
+    <div id="scrollable" class="scrollable" on-scroll="updateScrollState">
+      <slot></slot>
+    </div>
+`,is:"paper-dialog-scrollable",properties:{dialogElement:{type:Object}},get scrollTarget(){return this.$.scrollable},ready:function(){this._ensureTarget();this.classList.add("no-padding")},attached:function(){this._ensureTarget();requestAnimationFrame(this.updateScrollState.bind(this))},updateScrollState:function(){this.toggleClass("is-scrolled",0<this.scrollTarget.scrollTop);this.toggleClass("can-scroll",this.scrollTarget.offsetHeight<this.scrollTarget.scrollHeight);this.toggleClass("scrolled-to-bottom",this.scrollTarget.scrollTop+this.scrollTarget.offsetHeight>=this.scrollTarget.scrollHeight)},_ensureTarget:function(){this.dialogElement=this.dialogElement||this.parentElement;if(this.dialogElement&&this.dialogElement.behaviors&&0<=this.dialogElement.behaviors.indexOf(PaperDialogBehaviorImpl)){this.dialogElement.sizingTarget=this.scrollTarget;this.scrollTarget.classList.remove("fit")}else if(this.dialogElement){this.scrollTarget.classList.add("fit")}}});Polymer$1({_template:html`
     <style include="paper-dialog-shared-styles"></style>
     <slot></slot>
 `,is:"paper-dialog",behaviors:[PaperDialogBehavior,NeonAnimationRunnerBehavior],listeners:{"neon-animation-finish":"_onNeonAnimationFinish"},_renderOpened:function(){this.cancelAnimation();this.playAnimation("entry")},_renderClosed:function(){this.cancelAnimation();this.playAnimation("exit")},_onNeonAnimationFinish:function(){if(this.opened){this._finishRenderOpened()}else{this._finishRenderClosed()}}});const PaperInputAddonBehavior={attached:function(){this.fire("addon-attached")},update:function(){}};var paperInputAddonBehavior={PaperInputAddonBehavior:PaperInputAddonBehavior};const PaperInputHelper={NextLabelID:1,NextAddonID:1,NextInputID:1},PaperInputBehaviorImpl={properties:{label:{type:String},value:{notify:!0,type:String},disabled:{type:Boolean,value:!1},invalid:{type:Boolean,value:!1,notify:!0},allowedPattern:{type:String},type:{type:String},list:{type:String},pattern:{type:String},required:{type:Boolean,value:!1},errorMessage:{type:String},charCounter:{type:Boolean,value:!1},noLabelFloat:{type:Boolean,value:!1},alwaysFloatLabel:{type:Boolean,value:!1},autoValidate:{type:Boolean,value:!1},validator:{type:String},autocomplete:{type:String,value:"off"},autofocus:{type:Boolean,observer:"_autofocusChanged"},inputmode:{type:String},minlength:{type:Number},maxlength:{type:Number},min:{type:String},max:{type:String},step:{type:String},name:{type:String},placeholder:{type:String,value:""},readonly:{type:Boolean,value:!1},size:{type:Number},autocapitalize:{type:String,value:"none"},autocorrect:{type:String,value:"off"},autosave:{type:String},results:{type:Number},accept:{type:String},multiple:{type:Boolean},_ariaDescribedBy:{type:String,value:""},_ariaLabelledBy:{type:String,value:""},_inputId:{type:String,value:""}},listeners:{"addon-attached":"_onAddonAttached"},keyBindings:{"shift+tab:keydown":"_onShiftTabDown"},hostAttributes:{tabindex:0},get inputElement(){if(!this.$){this.$={}}if(!this.$.input){this._generateInputId();this.$.input=this.$$("#"+this._inputId)}return this.$.input},get _focusableElement(){return this.inputElement},created:function(){this._typesThatHaveText=["date","datetime","datetime-local","month","time","week","file"]},attached:function(){this._updateAriaLabelledBy();if(!PolymerElement&&this.inputElement&&-1!==this._typesThatHaveText.indexOf(this.inputElement.type)){this.alwaysFloatLabel=!0}},_appendStringWithSpace:function(str,more){if(str){str=str+" "+more}else{str=more}return str},_onAddonAttached:function(event){var target=dom(event).rootTarget;if(target.id){this._ariaDescribedBy=this._appendStringWithSpace(this._ariaDescribedBy,target.id)}else{var id="paper-input-add-on-"+PaperInputHelper.NextAddonID++;target.id=id;this._ariaDescribedBy=this._appendStringWithSpace(this._ariaDescribedBy,id)}},validate:function(){return this.inputElement.validate()},_focusBlurHandler:function(event){IronControlState._focusBlurHandler.call(this,event);if(this.focused&&!this._shiftTabPressed&&this._focusableElement){this._focusableElement.focus()}},_onShiftTabDown:function(){var oldTabIndex=this.getAttribute("tabindex");this._shiftTabPressed=!0;this.setAttribute("tabindex","-1");this.async(function(){this.setAttribute("tabindex",oldTabIndex);this._shiftTabPressed=!1},1)},_handleAutoValidate:function(){if(this.autoValidate)this.validate()},updateValueAndPreserveCaret:function(newValue){try{var start=this.inputElement.selectionStart;this.value=newValue;this.inputElement.selectionStart=start;this.inputElement.selectionEnd=start}catch(e){this.value=newValue}},_computeAlwaysFloatLabel:function(alwaysFloatLabel,placeholder){return placeholder||alwaysFloatLabel},_updateAriaLabelledBy:function(){var label=dom(this.root).querySelector("label");if(!label){this._ariaLabelledBy="";return}var labelledBy;if(label.id){labelledBy=label.id}else{labelledBy="paper-input-label-"+PaperInputHelper.NextLabelID++;label.id=labelledBy}this._ariaLabelledBy=labelledBy},_generateInputId:function(){if(!this._inputId||""===this._inputId){this._inputId="input-"+PaperInputHelper.NextInputID++}},_onChange:function(event){if(this.shadowRoot){this.fire(event.type,{sourceEvent:event},{node:this,bubbles:event.bubbles,cancelable:event.cancelable})}},_autofocusChanged:function(){if(this.autofocus&&this._focusableElement){var activeElement=document.activeElement,isActiveElementValid=activeElement instanceof HTMLElement,isSomeElementActive=isActiveElementValid&&activeElement!==document.body&&activeElement!==document.documentElement;if(!isSomeElementActive){this._focusableElement.focus()}}}},PaperInputBehavior=[IronControlState,IronA11yKeysBehavior,PaperInputBehaviorImpl];var paperInputBehavior={PaperInputHelper:PaperInputHelper,PaperInputBehaviorImpl:PaperInputBehaviorImpl,PaperInputBehavior:PaperInputBehavior};Polymer$1({_template:html`
@@ -3970,7 +4013,7 @@
 
     <snack-bar ?active="${_snackbarOpened}">
         You are now ${_offline?"offline":"online"}.</snack-bar>
-    `}static get properties(){return{appTitle:{type:String},serverAuth:{type:String},_page:{type:String},_params:{type:Object},_offline:{type:Boolean},_drawerOpened:{type:Boolean},_snackbarOpened:{type:Boolean},_isAuthenticated:{type:Boolean}}}constructor(){super();this._drawerOpened=!1;this._isAuthenticated=checkAuth();setPassiveTouchGestures(!0);this.addEventListener("authentication-change",e=>this._isAuthenticated=e.detail.status)}set serverAuth(value){console.log("server auth");console.log(value);this._isAuthenticated="1"===value?!0:!1}firstUpdated(){installRouter(location=>this._locationChanged(location));installOfflineWatcher(offline=>this._offlineChanged(offline));installMediaQueryWatcher(`(min-width: 460px)`,matches=>this._layoutChanged(matches))}updated(changedProps){if(changedProps.has("_page")){const pageTitle=this.appTitle+" - "+this._page;updateMetadata({title:pageTitle,description:pageTitle})}}_layoutChanged(){this._updateDrawerState(!1)}_offlineChanged(offline){const previousOffline=this._offline;this._offline=offline;if(previousOffline===void 0){return}clearTimeout(this.__snackbarTimer);this._snackbarOpened=!0;this.__snackbarTimer=setTimeout(()=>{this._snackbarOpened=!1},3e3)}_locationChanged(){const{page,params}=routeToPage(location,this._isAuthenticated);this._loadPage(page,params);this._updateDrawerState(!1)}_updateDrawerState(opened){if(opened!==this._drawerOpened){this._drawerOpened=opened}}_loadPage(page,params){switch(page){case"home":import("./cosmodox-home.js").then(bundle=>bundle&&bundle.$cosmodoxHome||{});break;case"user-register":import("./cosmodox-user-register.js").then(bundle=>bundle&&bundle.$cosmodoxUserRegister||{});break;case"group-register":import("./cosmodox-group-register.js").then(bundle=>bundle&&bundle.$cosmodoxGroupRegister||{});break;case"institution-register":import("./cosmodox-institution-register.js").then(bundle=>bundle&&bundle.$cosmodoxInstitutionRegister||{});break;case"profile":import("./cosmodox-profile.js").then(bundle=>bundle&&bundle.$cosmodoxProfile||{});break;case"research-group":import("./cosmodox-research-group.js").then(bundle=>bundle&&bundle.$cosmodoxResearchGroup||{});break;case"institution":import("./cosmodox-institution.js").then(bundle=>bundle&&bundle.$cosmodoxInstitution||{});break;case"project":import("./cosmodox-project.js").then(bundle=>bundle&&bundle.$cosmodoxProject||{});break;case"projects":import("./cosmodox-projects.js").then(bundle=>bundle&&bundle.$cosmodoxProjects||{});break;case"media":break;default:page="view404";import("./my-view404.js").then(bundle=>bundle&&bundle.$myView404||{});}this._params=params;this._page=page;gtag("config","UA-128378086-1",{page_path:`/${page}`})}}window.customElements.define("my-app",MyApp);const createMutation=Apollo.gql`
+    `}static get properties(){return{appTitle:{type:String},serverAuth:{type:String},_page:{type:String},_params:{type:Object},_offline:{type:Boolean},_drawerOpened:{type:Boolean},_snackbarOpened:{type:Boolean},_isAuthenticated:{type:Boolean}}}constructor(){super();this._drawerOpened=!1;this._isAuthenticated=checkAuth();setPassiveTouchGestures(!0);this.addEventListener("authentication-change",e=>this._isAuthenticated=e.detail.status)}set serverAuth(value){this._isAuthenticated="1"===value?!0:!1}firstUpdated(){installRouter(location=>this._locationChanged(location));installOfflineWatcher(offline=>this._offlineChanged(offline));installMediaQueryWatcher(`(min-width: 460px)`,matches=>this._layoutChanged(matches))}updated(changedProps){if(changedProps.has("_page")){const pageTitle=this.appTitle+" - "+this._page;updateMetadata({title:pageTitle,description:pageTitle})}}_layoutChanged(){this._updateDrawerState(!1)}_offlineChanged(offline){const previousOffline=this._offline;this._offline=offline;if(previousOffline===void 0){return}clearTimeout(this.__snackbarTimer);this._snackbarOpened=!0;this.__snackbarTimer=setTimeout(()=>{this._snackbarOpened=!1},3e3)}_locationChanged(){const{page,params}=routeToPage(location,this._isAuthenticated);this._loadPage(page,params);this._updateDrawerState(!1)}_updateDrawerState(opened){if(opened!==this._drawerOpened){this._drawerOpened=opened}}_loadPage(page,params){switch(page){case"home":import("./cosmodox-home.js").then(bundle=>bundle&&bundle.$cosmodoxHome||{});break;case"user-register":import("./cosmodox-user-register.js").then(bundle=>bundle&&bundle.$cosmodoxUserRegister||{});break;case"group-register":import("./cosmodox-group-register.js").then(bundle=>bundle&&bundle.$cosmodoxGroupRegister||{});break;case"institution-register":import("./cosmodox-institution-register.js").then(bundle=>bundle&&bundle.$cosmodoxInstitutionRegister||{});break;case"profile":import("./cosmodox-profile.js").then(bundle=>bundle&&bundle.$cosmodoxProfile||{});break;case"research-group":import("./cosmodox-research-group.js").then(bundle=>bundle&&bundle.$cosmodoxResearchGroup||{});break;case"institution":import("./cosmodox-institution.js").then(bundle=>bundle&&bundle.$cosmodoxInstitution||{});break;case"project":import("./cosmodox-project.js").then(bundle=>bundle&&bundle.$cosmodoxProject||{});break;case"projects":import("./cosmodox-projects.js").then(bundle=>bundle&&bundle.$cosmodoxProjects||{});break;case"media":break;default:page="view404";import("./my-view404.js").then(bundle=>bundle&&bundle.$myView404||{});}this._params=params;this._page=page;gtag("config","UA-128378086-1",{page_path:`/${page}`})}}window.customElements.define("my-app",MyApp);const createMutation=Apollo.gql`
   mutation createProject($input: ProjectCreateGenericType!) {
     createProject(input: $input) {
       ok
@@ -3985,20 +4028,28 @@
         }
 
         paper-dialog {
-          width: 60%;
+          width: 90%;
+        }
+
+        @media (min-width: 460px) {
+          paper-dialog {
+            width: 70%;
+          }
         }
       </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Nuevo proyecto</h2>
-        <iron-form>
-          <form>
-            <paper-input name="name" label="Nombre *" required></paper-input>
-            <paper-input name="theme" label="Tema *" required></paper-input>
-            <paper-input name="vinculatedInstitutions" label="Instituciones vinculadas"></paper-input>
-            <areas-checkbox name="areas"></areas-checkbox>
-            <paper-textarea name="description" label="Descripción"></paper-textarea>
-          </form>
-        </iron-form>
+        <paper-dialog-scrollable>
+          <iron-form>
+            <form>
+              <paper-input name="name" label="Nombre *" required></paper-input>
+              <paper-input name="theme" label="Tema *" required></paper-input>
+              <paper-input name="vinculatedInstitutions" label="Instituciones vinculadas"></paper-input>
+              <areas-checkbox name="areas"></areas-checkbox>
+              <paper-textarea name="description" label="Descripción"></paper-textarea>
+            </form>
+          </iron-form>
+        </paper-dialog-scrollable>
         <div class="buttons">
           <vaadin-button @click="${()=>{this.opened=!1}}">Cancelar</vaadin-button>
           <vaadin-button @click="${()=>this.createProject()}">${createButtonText(loading)}</vaadin-button>

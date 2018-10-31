@@ -16,6 +16,7 @@ import '@polymer/paper-input/paper-textarea';
 import '@polymer/paper-dialog/paper-dialog.js';
 import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box.js';
 import './areas-checkbox.js';
 
@@ -42,20 +43,28 @@ class NewProject extends ApolloMutation {
         }
 
         paper-dialog {
-          width: 60%;
+          width: 90%;
+        }
+
+        @media (min-width: 460px) {
+          paper-dialog {
+            width: 70%;
+          }
         }
       </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Nuevo proyecto</h2>
-        <iron-form>
-          <form>
-            <paper-input name="name" label="Nombre *" required></paper-input>
-            <paper-input name="theme" label="Tema *" required></paper-input>
-            <paper-input name="vinculatedInstitutions" label="Instituciones vinculadas"></paper-input>
-            <areas-checkbox name="areas"></areas-checkbox>
-            <paper-textarea name="description" label="Descripción"></paper-textarea>
-          </form>
-        </iron-form>
+        <paper-dialog-scrollable>
+          <iron-form>
+            <form>
+              <paper-input name="name" label="Nombre *" required></paper-input>
+              <paper-input name="theme" label="Tema *" required></paper-input>
+              <paper-input name="vinculatedInstitutions" label="Instituciones vinculadas"></paper-input>
+              <areas-checkbox name="areas"></areas-checkbox>
+              <paper-textarea name="description" label="Descripción"></paper-textarea>
+            </form>
+          </iron-form>
+        </paper-dialog-scrollable>
         <div class="buttons">
           <vaadin-button @click="${() => { this.opened = false; }}">Cancelar</vaadin-button>
           <vaadin-button @click="${() => this.createProject()}">${createButtonText(loading)}</vaadin-button>

@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.views.generic import TemplateView
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf import settings
@@ -29,6 +30,10 @@ if settings.DEBUG:
 
 urlpatterns = urlpatterns + [
     url(r'^admin/', admin.site.urls),
+    url(r'^service-worker.js$', TemplateView.as_view(
+        template_name='service-worker.js',
+        content_type='application/javascript'
+    )),
     url(r'^graphiql', core_views.GraphqlView.as_view(graphiql=True)),
     url(r'^graphql', core_views.GraphqlView.as_view(), name='graphql'),
     url('.*', core_views.IndexView.as_view(), name='index'),

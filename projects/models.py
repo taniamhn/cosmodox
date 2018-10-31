@@ -1,6 +1,8 @@
+from django.utils.module_loading import import_string
 from django.conf import settings
 from django.db import models
 
+USER_PATH = 'accounts.models.User'
 
 def project_img_path(instance, filename):
     return 'projects/{}'.format(filename)
@@ -31,11 +33,19 @@ class Project(models.Model):
     def detail_url(self):
         return '/project/{}'.format(self.id)
     
+    def members(self):
+        """Un queryset de usuarios con los miembros del proyecto."""
+
+        User = import_string(USER_PATH)
+        group = getattr(self.owner, 'research_group', None)
+        members = group.members.values('user') if group else []
+        return User.objects.filter(models.Q(id=self.owner_id) | models.Q(id__in=members))
+    
     def can_edit(self, user):
         return user.id == self.owner_id
     
     def can_add_update(self, user):
-        return user.id == self.owner_id
+        return self.members().filter(id=user.id).exists()
 
 class ProjectUpdate(models.Model):
 

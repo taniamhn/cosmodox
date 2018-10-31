@@ -16,11 +16,11 @@ module.exports = {
   runtimeCaching: [
     {
       urlPattern: /\/@webcomponents\/webcomponentsjs\//,
-      handler: 'fastest'
+      handler: 'fastest',
     },
     {
       urlPattern: /^https:\/\/fonts.gstatic.com\//,
-      handler: 'fastest'
-    }
-  ]
+      handler: 'fastest',
+    },
+  ],
 };
