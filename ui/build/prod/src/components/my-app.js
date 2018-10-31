@@ -4028,14 +4028,11 @@
         }
 
         paper-dialog {
-          width: 90%;
+          width: 100%;
+          height: 100%;
         }
 
-        @media (min-width: 460px) {
-          paper-dialog {
-            width: 70%;
-          }
-        }
+        
       </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Nuevo proyecto</h2>
