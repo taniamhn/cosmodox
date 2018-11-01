@@ -38,6 +38,10 @@ class NewProject extends ApolloMutation {
 
     return html`
       <style>
+        iron-form {
+          height: 60vh;
+        }
+
         form {
           display: grid;
         }
@@ -45,9 +49,7 @@ class NewProject extends ApolloMutation {
         paper-dialog {
           width: 100%;
           height: 100%;
-        }
-
-        
+        }        
       </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Nuevo proyecto</h2>

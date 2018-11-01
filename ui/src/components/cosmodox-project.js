@@ -24,6 +24,7 @@ import '@vaadin/vaadin-text-field/theme/material/vaadin-text-area.js';
 import './project-states-combo.js';
 import './project-update-info.js';
 import './new-project-update.js';
+import './project-comments.js';
 import './areas-checkbox.js';
 
 // These are the shared styles needed by this element.
@@ -169,12 +170,13 @@ const ownerInfo = (owner) => {
   return __typename === 'ResearchGroup' ? researchGroupOwner(profile, detailUrl) : personalOwner(owner, detailUrl);
 }
 
-const projectInfo = (project, changeEdit) => {
+const projectInfo = (project, changeEdit, openProjectComments) => {
   const { areas = [], owner = {} }  = project;
 
   return html`
     <div class="basic-info">
-      <paper-button ?hidden="${!project.canEdit}" @click="${() => { changeEdit(true) }}">${editIcon}</paper-button>
+      <paper-button ?hidden="${!project.canEdit}" @click="${() => { changeEdit(true); }}">${editIcon}</paper-button>
+      <vaadin-button @click="${() => { openProjectComments(); }}">Ver comentarios</vaadin-button>
       <iron-image src="${project.image}" placeholder="/static/images/project-none.png" sizing="contain" preload fade></iron-image>
       <p class="basic">
         <span>Nombre: </span>${project.name} <br>
@@ -190,6 +192,7 @@ const projectInfo = (project, changeEdit) => {
         <p>${project.description}</p>
       </div>
     </div>
+    <project-comments .projectId="${project.id}"></project-comments>
   `
 };
 
@@ -219,7 +222,7 @@ class ProjectDetail extends ApolloQuery {
         <h2>Proyecto</h2>
         ${editing
           ? html`<edit-project-form .project="${project}" @end-editing="${() => this._changeEditing(false)}"></edit-project-form>`
-          : projectInfo(project, this._changeEditing.bind(this))
+          : projectInfo(project, this._changeEditing.bind(this), this._openProjectComments.bind(this))
         }
       </section>
       <section class="updates">
@@ -256,6 +259,10 @@ class ProjectDetail extends ApolloQuery {
 
   _changeEditing(value) {
     this.editing = value;
+  }
+
+  _openProjectComments() {
+    this.shadowRoot.querySelector('project-comments').opened = true
   }
 }
 

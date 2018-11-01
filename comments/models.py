@@ -10,6 +10,9 @@ class ProjectComment(models.Model):
 
   def __str__(self):
     return '{} - {}'.format(self.project_id, self.id)
+  
+  class Meta:
+    ordering = ['-created_at', '-id']
 
 
 class ProjectUpdateComment(models.Model):
@@ -21,3 +24,6 @@ class ProjectUpdateComment(models.Model):
 
   def __str__(self):
     return '{} - {}'.format(self.project_update_id, self.id)
+  
+  class Meta:
+    ordering = ['-created_at', '-id']

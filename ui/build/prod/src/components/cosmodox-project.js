@@ -1,4 +1,4 @@
-import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronControlState,PaperRippleBehavior,Polymer,html$1 as html,afterNextRender,PolymerElement,ThemableMixin,ElementMixin,TextFieldMixin,resetMouseCanceller,html as html$1,LitElement,ApolloQuery,fileIcon,addIcon,editIcon,ApolloMutation,PageViewElement,SharedStyles}from"./my-app.js";const IronCheckedElementBehaviorImpl={properties:{checked:{type:Boolean,value:!1,reflectToAttribute:!0,notify:!0,observer:"_checkedChanged"},toggles:{type:Boolean,value:!0,reflectToAttribute:!0},value:{type:String,value:"on",observer:"_valueChanged"}},observers:["_requiredChanged(required)"],created:function(){this._hasIronCheckedElementBehavior=!0},_getValidity:function(){return this.disabled||!this.required||this.checked},_requiredChanged:function(){if(this.required){this.setAttribute("aria-required","true")}else{this.removeAttribute("aria-required")}},_checkedChanged:function(){this.active=this.checked;this.fire("iron-change")},_valueChanged:function(){if(this.value===void 0||null===this.value){this.value="on"}}},IronCheckedElementBehavior=[IronFormElementBehavior,IronValidatableBehavior,IronCheckedElementBehaviorImpl];var ironCheckedElementBehavior={IronCheckedElementBehaviorImpl:IronCheckedElementBehaviorImpl,IronCheckedElementBehavior:IronCheckedElementBehavior};const PaperInkyFocusBehaviorImpl={observers:["_focusedChanged(receivedFocusFromKeyboard)"],_focusedChanged:function(receivedFocusFromKeyboard){if(receivedFocusFromKeyboard){this.ensureRipple()}if(this.hasRipple()){this._ripple.holdDown=receivedFocusFromKeyboard}},_createRipple:function(){var ripple=PaperRippleBehavior._createRipple();ripple.id="ink";ripple.setAttribute("center","");ripple.classList.add("circle");return ripple}},PaperInkyFocusBehavior=[IronButtonState,IronControlState,PaperRippleBehavior,PaperInkyFocusBehaviorImpl];var paperInkyFocusBehavior={PaperInkyFocusBehaviorImpl:PaperInkyFocusBehaviorImpl,PaperInkyFocusBehavior:PaperInkyFocusBehavior};const PaperCheckedElementBehaviorImpl={_checkedChanged:function(){IronCheckedElementBehaviorImpl._checkedChanged.call(this);if(this.hasRipple()){if(this.checked){this._ripple.setAttribute("checked","")}else{this._ripple.removeAttribute("checked")}}},_buttonStateChanged:function(){PaperRippleBehavior._buttonStateChanged.call(this);if(this.disabled){return}if(this.isAttached){this.checked=this.active}}},PaperCheckedElementBehavior=[PaperInkyFocusBehavior,IronCheckedElementBehavior,PaperCheckedElementBehaviorImpl];var paperCheckedElementBehavior={PaperCheckedElementBehaviorImpl:PaperCheckedElementBehaviorImpl,PaperCheckedElementBehavior:PaperCheckedElementBehavior};const template=html`<style>
+import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronControlState,PaperRippleBehavior,Polymer,html$1 as html,afterNextRender,PolymerElement,ThemableMixin,ElementMixin,TextFieldMixin,resetMouseCanceller,LitElement,html as html$1,ApolloQuery,fileIcon,addIcon,editIcon,ApolloMutation,PageViewElement,SharedStyles}from"./my-app.js";const IronCheckedElementBehaviorImpl={properties:{checked:{type:Boolean,value:!1,reflectToAttribute:!0,notify:!0,observer:"_checkedChanged"},toggles:{type:Boolean,value:!0,reflectToAttribute:!0},value:{type:String,value:"on",observer:"_valueChanged"}},observers:["_requiredChanged(required)"],created:function(){this._hasIronCheckedElementBehavior=!0},_getValidity:function(){return this.disabled||!this.required||this.checked},_requiredChanged:function(){if(this.required){this.setAttribute("aria-required","true")}else{this.removeAttribute("aria-required")}},_checkedChanged:function(){this.active=this.checked;this.fire("iron-change")},_valueChanged:function(){if(this.value===void 0||null===this.value){this.value="on"}}},IronCheckedElementBehavior=[IronFormElementBehavior,IronValidatableBehavior,IronCheckedElementBehaviorImpl];var ironCheckedElementBehavior={IronCheckedElementBehaviorImpl:IronCheckedElementBehaviorImpl,IronCheckedElementBehavior:IronCheckedElementBehavior};const PaperInkyFocusBehaviorImpl={observers:["_focusedChanged(receivedFocusFromKeyboard)"],_focusedChanged:function(receivedFocusFromKeyboard){if(receivedFocusFromKeyboard){this.ensureRipple()}if(this.hasRipple()){this._ripple.holdDown=receivedFocusFromKeyboard}},_createRipple:function(){var ripple=PaperRippleBehavior._createRipple();ripple.id="ink";ripple.setAttribute("center","");ripple.classList.add("circle");return ripple}},PaperInkyFocusBehavior=[IronButtonState,IronControlState,PaperRippleBehavior,PaperInkyFocusBehaviorImpl];var paperInkyFocusBehavior={PaperInkyFocusBehaviorImpl:PaperInkyFocusBehaviorImpl,PaperInkyFocusBehavior:PaperInkyFocusBehavior};const PaperCheckedElementBehaviorImpl={_checkedChanged:function(){IronCheckedElementBehaviorImpl._checkedChanged.call(this);if(this.hasRipple()){if(this.checked){this._ripple.setAttribute("checked","")}else{this._ripple.removeAttribute("checked")}}},_buttonStateChanged:function(){PaperRippleBehavior._buttonStateChanged.call(this);if(this.disabled){return}if(this.isAttached){this.checked=this.active}}},PaperCheckedElementBehavior=[PaperInkyFocusBehavior,IronCheckedElementBehavior,PaperCheckedElementBehaviorImpl];var paperCheckedElementBehavior={PaperCheckedElementBehaviorImpl:PaperCheckedElementBehaviorImpl,PaperCheckedElementBehavior:PaperCheckedElementBehavior};const template=html`<style>
   :host {
     display: inline-block;
     white-space: nowrap;
@@ -646,7 +646,34 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
       }
     </style>
   </template>
-</dom-module>`;document.head.appendChild($_documentContainer$3.content);const projectStateQuery=Apollo.gql`
+</dom-module>`;document.head.appendChild($_documentContainer$3.content);const commentInfo=comment=>{const{content,createdAt,createdBy}=comment;return html$1`
+    <div>
+      <p>${content}</p>
+      <time>${createdAt}</time>
+      <span>${createdBy.fullName}</span>
+    </div>
+  `};class CommentList extends LitElement{render(){const{comments}=this;return html$1`
+      <style>
+        :host {
+          display: block;
+        }
+
+        p {
+          margin: 0;
+        }
+
+        li {
+          padding: 10px;
+          border: 1px solid;
+          border-radius: 10px;
+          margin-bottom: 10px;
+          list-style-type: none;
+        }
+      </style>
+      <ul>
+        ${comments.map(comment=>html$1`<li>${commentInfo(comment)}</li>`)}
+      </ul>
+    `}static get properties(){return{comments:{type:Array}}}constructor(){super();this.comments=[]}}window.customElements.define("comment-list",CommentList);const projectStateQuery=Apollo.gql`
   query projectStateCombo {
     states: __type(name: "ProjectStateEnum") {
       enumValues { value: name, description }
@@ -714,28 +741,86 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
   }
 `,createButtonText=loading=>html$1`${loading?html$1`<concrete-loading-icon></concrete-loading-icon>`:"Crear"}`;class NewProjectUpdate extends ApolloMutation{render(){const{opened,loading}=this;return html$1`
       <style>
+        iron-form {
+          height: 60vh;
+        }
+
         form {
           display: grid;
         }
 
         paper-dialog {
-          width: 60%;
+          width: 100%;
+          height: 100%;
         }
       </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Nueva actualización</h2>
+        <paper-dialog-scrollable>
         <iron-form>
           <form>
             <paper-textarea name="content" label="Contenido *" required></paper-textarea>
             <vaadin-upload no-auto></vaadin-upload>
           </form>
         </iron-form>
+        </paper-dialog-scrollable>
         <div class="buttons">
           <vaadin-button @click="${()=>{this.opened=!1}}">Cancelar</vaadin-button>
           <vaadin-button @click="${()=>this.createProjectUpdate()}">${createButtonText(loading)}</vaadin-button>
         </div>
       </paper-dialog>
-    `}static get properties(){return{opened:{type:Boolean},projectId:{type:String}}}constructor(){super();this.opened=!1;this.client=Apollo.client;this.mutation=createMutation;this.refetchQueries=["projectDetail"];this.onCompleted=data=>{const{ok}=data.createProjectUpdate;if(ok){this.opened=!1;this.shadowRoot.querySelector("iron-form").reset();this.shadowRoot.querySelector("vaadin-upload").files=[]}}}_mutationData({content,projectId,files}={}){return{input:{files,content,project:projectId}}}createProjectUpdate(){const form=this.shadowRoot.querySelector("iron-form"),upload=this.shadowRoot.querySelector("vaadin-upload");if(form.validate()){this.variables=this._mutationData({files:[...upload.files],...form.serializeForm(),projectId:this.projectId});this.mutate()}}}window.customElements.define("new-project-update",NewProjectUpdate);const editMutation=Apollo.gql`
+    `}static get properties(){return{opened:{type:Boolean},projectId:{type:String}}}constructor(){super();this.opened=!1;this.client=Apollo.client;this.mutation=createMutation;this.refetchQueries=["projectDetail"];this.onCompleted=data=>{const{ok}=data.createProjectUpdate;if(ok){this.opened=!1;this.shadowRoot.querySelector("iron-form").reset();this.shadowRoot.querySelector("vaadin-upload").files=[]}}}_mutationData({content,projectId,files}={}){return{input:{files,content,project:projectId}}}createProjectUpdate(){const form=this.shadowRoot.querySelector("iron-form"),upload=this.shadowRoot.querySelector("vaadin-upload");if(form.validate()){this.variables=this._mutationData({files:[...upload.files],...form.serializeForm(),projectId:this.projectId});this.mutate()}}}window.customElements.define("new-project-update",NewProjectUpdate);const createMutation$1=Apollo.gql`
+  mutation createProjectComment($input: ProjectCommentCreateGenericType!) {
+    createProjectComment(input: $input) {
+      ok
+      errors { field, messages }
+    }
+  }
+`,commentButtonText=loading=>html$1`${loading?html$1`<concrete-loading-icon></concrete-loading-icon>`:"Comentar"}`;class NewProjectComment extends ApolloMutation{render(){const{loading}=this;return html$1`
+      <style>
+        form {
+          display: grid;
+        }
+      </style>
+      <paper-textarea required></paper-textarea>
+      <vaadin-button @click="${()=>this.comment()}">${commentButtonText(loading)}</vaadin-button>
+    `}static get properties(){return{projectId:{type:String}}}constructor(){super();this.client=Apollo.client;this.mutation=createMutation$1;this.refetchQueries=["projectComments"];this.onCompleted=data=>{const{ok}=data.createProjectComment;if(ok){this.shadowRoot.querySelector("paper-textarea").value=""}}}_mutationData({project,content}={}){return{input:{project,content}}}comment(){const textarea=this.shadowRoot.querySelector("paper-textarea");if(textarea.validate()){this.variables=this._mutationData({project:this.projectId,content:textarea.value});this.mutate()}}}window.customElements.define("new-project-comment",NewProjectComment);const commentsQuery=Apollo.gql`
+  query projectComments($project: ID!) {
+    projectComments(project: $project) {
+      results {
+        id
+        content
+        createdAt
+        createdBy { id, fullName }
+      }
+    }
+  }
+`;class ProjectComments extends ApolloQuery{render(){const{data,opened,_projectId}=this,comments=data&&data.projectComments?data.projectComments:{results:[]};return html$1`
+      <style>
+        :host {
+          display: block;
+        }
+
+        paper-dialog {
+          width: 100%;
+          height: 100%;
+        }
+
+        comment-list {
+          height: 60vh;
+        }
+      </style>
+      <paper-dialog ?opened=${opened} modal>
+        <h2>Comentarios</h2>
+        <paper-dialog-scrollable>
+          <new-project-comment .projectId="${_projectId}"></new-project-comment>
+          <comment-list .comments="${comments.results}"></comment-list>
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <vaadin-button @click="${()=>{this.opened=!1}}">Cerrar</vaadin-button>
+        </div>
+      </paper-dialog>
+    `}static get properties(){return{opened:{type:Boolean},_projectId:{type:String}}}constructor(){super();this.opened=!1;this.client=Apollo.client;this.query=commentsQuery}shouldUpdate(changedProperties){return changedProperties.has("opened")&&!!this.data||changedProperties.has("_projectId")&&!!this.data||super.shouldUpdate(changedProperties)}set projectId(id){this._projectId=id;this.variables={project:id}}}window.customElements.define("project-comments",ProjectComments);const editMutation=Apollo.gql`
   mutation updateProject($input: ProjectUpdateGenericType!) {
     updateProject(input: $input) {
       ok
@@ -800,9 +885,10 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
       }
     }
   }
-`,personalOwner=(owner,url)=>html$1`<span>Usuario: </span> <a href="${url}">${owner.fullName}</a>`,researchGroupOwner=(group,url)=>html$1`<span>Grupo de investigación: </span> <a href="${url}">${group.name}</a>`,ownerInfo=owner=>{const{profile={}}=owner,{detailUrl,__typename}=profile;return"ResearchGroup"===__typename?researchGroupOwner(profile,detailUrl):personalOwner(owner,detailUrl)},projectInfo=(project,changeEdit)=>{const{areas=[],owner={}}=project;return html$1`
+`,personalOwner=(owner,url)=>html$1`<span>Usuario: </span> <a href="${url}">${owner.fullName}</a>`,researchGroupOwner=(group,url)=>html$1`<span>Grupo de investigación: </span> <a href="${url}">${group.name}</a>`,ownerInfo=owner=>{const{profile={}}=owner,{detailUrl,__typename}=profile;return"ResearchGroup"===__typename?researchGroupOwner(profile,detailUrl):personalOwner(owner,detailUrl)},projectInfo=(project,changeEdit,openProjectComments)=>{const{areas=[],owner={}}=project;return html$1`
     <div class="basic-info">
       <paper-button ?hidden="${!project.canEdit}" @click="${()=>{changeEdit(!0)}}">${editIcon}</paper-button>
+      <vaadin-button @click="${()=>{openProjectComments()}}">Ver comentarios</vaadin-button>
       <iron-image src="${project.image}" placeholder="/static/images/project-none.png" sizing="contain" preload fade></iron-image>
       <p class="basic">
         <span>Nombre: </span>${project.name} <br>
@@ -818,6 +904,7 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
         <p>${project.description}</p>
       </div>
     </div>
+    <project-comments .projectId="${project.id}"></project-comments>
   `};class ProjectDetail extends ApolloQuery{render(){const{data,editing}=this,project=data&&data.project?data.project:{owner:{}},{updates=[]}=project;return html$1`
       ${SharedStyles}
       <style>
@@ -836,7 +923,7 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
       </style>
       <section>
         <h2>Proyecto</h2>
-        ${editing?html$1`<edit-project-form .project="${project}" @end-editing="${()=>this._changeEditing(!1)}"></edit-project-form>`:projectInfo(project,this._changeEditing.bind(this))}
+        ${editing?html$1`<edit-project-form .project="${project}" @end-editing="${()=>this._changeEditing(!1)}"></edit-project-form>`:projectInfo(project,this._changeEditing.bind(this),this._openProjectComments.bind(this))}
       </section>
       <section class="updates">
         <h3>Actualizaciones</h3>
@@ -846,7 +933,7 @@ import{IronFormElementBehavior,IronValidatableBehavior,IronButtonState,IronContr
         </ul>
         <new-project-update .projectId="${project.id}"></new-project-update>
       </section>
-    `}static get properties(){return{editing:{type:Boolean}}}constructor(){super();this.editing=!1;this.client=Apollo.client;this.query=projectQuery}shouldUpdate(changedProperties){return changedProperties.has("editing")&&!!this.data||super.shouldUpdate(changedProperties)}set projectId(id){this.variables={id}}_changeEditing(value){this.editing=value}}window.customElements.define("project-detail",ProjectDetail);class CosmodoxProject extends PageViewElement{render(){const{params}=this;return html$1`
+    `}static get properties(){return{editing:{type:Boolean}}}constructor(){super();this.editing=!1;this.client=Apollo.client;this.query=projectQuery}shouldUpdate(changedProperties){return changedProperties.has("editing")&&!!this.data||super.shouldUpdate(changedProperties)}set projectId(id){this.variables={id}}_changeEditing(value){this.editing=value}_openProjectComments(){this.shadowRoot.querySelector("project-comments").opened=!0}}window.customElements.define("project-detail",ProjectDetail);class CosmodoxProject extends PageViewElement{render(){const{params}=this;return html$1`
       ${SharedStyles}
       <project-detail .projectId="${params.id}"></project-detail>
     `}static get properties(){return{params:{type:Object}}}}window.customElements.define("cosmodox-project",CosmodoxProject);export{ironCheckedElementBehavior as $ironCheckedElementBehavior,paperCheckedElementBehavior as $paperCheckedElementBehavior,paperInkyFocusBehavior as $paperInkyFocusBehavior,vaadinProgressBar as $vaadinProgressBar,vaadinProgressMixin as $vaadinProgressMixin,vaadinTextArea as $vaadinTextArea,vaadinUploadFile as $vaadinUploadFile,vaadinUpload as $vaadinUpload,IronCheckedElementBehaviorImpl,IronCheckedElementBehavior,PaperCheckedElementBehaviorImpl,PaperCheckedElementBehavior,PaperInkyFocusBehaviorImpl,PaperInkyFocusBehavior,ProgressBarElement,ProgressMixin,TextAreaElement,UploadFileElement,UploadElement};

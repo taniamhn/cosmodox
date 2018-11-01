@@ -4023,6 +4023,10 @@
   }
 `,createButtonText=loading=>html$1`${loading?html$1`<concrete-loading-icon></concrete-loading-icon>`:"Crear"}`;class NewProject extends ApolloMutation{render(){const{opened,loading}=this;return html$1`
       <style>
+        iron-form {
+          height: 60vh;
+        }
+
         form {
           display: grid;
         }
@@ -4030,9 +4034,7 @@
         paper-dialog {
           width: 100%;
           height: 100%;
-        }
-
-        
+        }        
       </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Nuevo proyecto</h2>

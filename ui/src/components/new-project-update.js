@@ -16,6 +16,7 @@ import '@polymer/paper-dialog/paper-dialog.js';
 import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-button/theme/material/vaadin-button.js';
 import '@vaadin/vaadin-upload/theme/material/vaadin-upload.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 
 const createMutation = Apollo.gql`
   mutation createProjectUpdate($input: ProjectUpdateInput!) {
@@ -34,22 +35,29 @@ class NewProjectUpdate extends ApolloMutation {
 
     return html`
       <style>
+        iron-form {
+          height: 60vh;
+        }
+
         form {
           display: grid;
         }
 
         paper-dialog {
-          width: 60%;
+          width: 100%;
+          height: 100%;
         }
       </style>
       <paper-dialog ?opened=${opened} modal>
         <h2>Nueva actualización</h2>
+        <paper-dialog-scrollable>
         <iron-form>
           <form>
             <paper-textarea name="content" label="Contenido *" required></paper-textarea>
             <vaadin-upload no-auto></vaadin-upload>
           </form>
         </iron-form>
+        </paper-dialog-scrollable>
         <div class="buttons">
           <vaadin-button @click="${() => { this.opened = false; }}">Cancelar</vaadin-button>
           <vaadin-button @click="${() => this.createProjectUpdate()}">${createButtonText(loading)}</vaadin-button>

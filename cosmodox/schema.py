@@ -18,6 +18,7 @@ class Query(
 class Mutation(
     accounts.schema.Mutation,
     projects.schema.Mutation,
+    comments.schema.Mutation,
     graphene.ObjectType
 ):
     pass
