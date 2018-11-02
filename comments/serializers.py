@@ -13,3 +13,14 @@ class ProjectCommentSerializer(serializers.ModelSerializer):
   def create(self, validated_data):
     user = self.context['request'].user
     return ProjectComment.objects.create(**validated_data, created_by=user)
+
+class ProjectUpdateCommentSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = ProjectUpdateComment
+    fields = ['content', 'project_update']
+
+  @transaction.atomic
+  def create(self, validated_data):
+    user = self.context['request'].user
+    return ProjectUpdateComment.objects.create(**validated_data, created_by=user)

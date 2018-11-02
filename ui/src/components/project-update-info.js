@@ -48,7 +48,7 @@ class ProjectUpdateInfo extends LitElement {
         }
 
         a {
-          color: var(--app-dark-text-color);
+          color: var(--material-primary-color);
           text-decoration: none;
         }
 
@@ -63,6 +63,7 @@ class ProjectUpdateInfo extends LitElement {
         </ul>
         <time>${projectUpdate.createdAt}</time>
         <span>${projectUpdate.createdBy.fullName}</span>
+        <a @click="${(e) => { this.fireOpenComments(e); }}">Ver comentarios</a>
       </div>
     `;
   }
@@ -76,6 +77,13 @@ class ProjectUpdateInfo extends LitElement {
   constructor() {
     super();
     this.projectUpdate = {};
+  }
+
+  fireOpenComments(e) {
+    e.preventDefault();
+    this.dispatchEvent(new CustomEvent('open-comments', {
+      detail: { projectUpdate: this.projectUpdate.id },
+    }));
   }
 }
 

@@ -21,6 +21,7 @@ import 'concrete-elements/src/elements/ConcreteLoadingIcon.js';
 import '@vaadin/vaadin-checkbox/theme/material/vaadin-checkbox.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-area.js';
+import './project-update-comments.js';
 import './project-states-combo.js';
 import './project-update-info.js';
 import './new-project-update.js';
@@ -229,9 +230,10 @@ class ProjectDetail extends ApolloQuery {
         <h3>Actualizaciones</h3>
         <paper-button ?hidden="${!project.canAddUpdate}" @click="${() => this.shadowRoot.querySelector('new-project-update').opened = true}">${addIcon} nueva</paper-button>
         <ul>
-          ${updates.map(update => html`<li><project-update-info .projectUpdate="${update}"></project-update-info></li>`)}
+          ${updates.map(update => html`<li><project-update-info .projectUpdate="${update}" @open-comments="${(e) => { this._openProjectUpdateComments(e); }}"></project-update-info></li>`)}
         </ul>
         <new-project-update .projectId="${project.id}"></new-project-update>
+        <project-update-comments></project-update-comments>
       </section>
     `;
   }
@@ -263,6 +265,12 @@ class ProjectDetail extends ApolloQuery {
 
   _openProjectComments() {
     this.shadowRoot.querySelector('project-comments').opened = true
+  }
+
+  _openProjectUpdateComments(e) {
+    const updateCommentsElem = this.shadowRoot.querySelector('project-update-comments');
+    updateCommentsElem.projectUpdateId = e.detail.projectUpdate;
+    updateCommentsElem.opened = true
   }
 }
 
